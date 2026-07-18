@@ -1,7 +1,7 @@
 {
   "2026-07-18": {
     "date": "2026-07-18",
-    "generatedAt": "2026-07-18T18:42:53.845Z",
+    "generatedAt": "2026-07-18T18:49:27.762Z",
     "ranges": {
       "daily": [
         {
@@ -10,20 +10,28 @@
           "fullName": "Robbyant/lingbot-map",
           "description": "A feed-forward 3D foundation model for reconstructing scenes from streaming data",
           "language": "Python",
-          "stars": 12724,
-          "starsRange": 827,
-          "forks": 1331,
+          "stars": 827,
+          "starsRange": 0,
+          "forks": 827,
           "analysis": {
-            "coreIdea": "LingBot-Map 是一个前馈式 3D 基础模型，能够从流式输入数据中实时重建 3D 场景，无需传统 SLAM 的后端优化。",
-            "engineeringMethod": "采用 Geometric Context Transformer 架构，统一了坐标对齐、密集几何线索和长程漂移校正，在单个流式框架内实现高效推理。",
-            "whyItMatters": "传统 3D 重建需要离线处理或高计算量优化，LingBot-Map 实现了真正的流式实时重建。",
-            "audience": "3D 视觉研究员、机器人工程师、AR/VR 开发者",
-            "difficulty": "advanced",
-            "quickStart": "从 HuggingFace 下载预训练模型，按项目示例输入视频流即可运行。",
-            "whyItIsHot": "3D 基础模型是当前 AI 前沿方向，LingBot-Map 实现了业界领先的流式重建效果。",
-            "useCase": "机器人搭载 LingBot-Map 在移动中实时构建 3D 地图，无需预先扫描。"
+            "coreIdea": "A feed-forward 3D foundation model for reconstructing scenes from streaming data",
+            "engineeringMethod": "基于管道架构设计，数据处理流程清晰可追溯，支持自定义组件和中间处理环节。",
+            "whyItMatters": "AI 正在重塑各行各业，该项目为开发者提供了实用的 AI 工具和基础设施，降低了 AI 应用开发门槛。",
+            "audience": "Python 开发者、数据工程师",
+            "difficulty": "intermediate",
+            "quickStart": "pip install lingbot-map",
+            "whyItIsHot": "AI 领域的创新永不停歇，该项目代表了该方向的最新进展。",
+            "useCase": "数据分析团队使用 lingbot-map 处理每日 TB 级数据，显著缩短数据处理流水线时间。",
+            "_meta": {
+              "category": "ai-ml",
+              "techStack": [
+                "python"
+              ],
+              "topics": [],
+              "firstParagraph": ""
+            }
           },
-          "weeklyAppearances": 1
+          "weeklyAppearances": 2
         },
         {
           "rank": 2,
@@ -31,20 +39,28 @@
           "fullName": "apache/ossie",
           "description": "Apache Ossie, industry wide specification effort to standardize how we exchange semantic metadata across analytics, AI and BI platforms, providing a vendor neutral, single source of truth for semantic data",
           "language": "Python",
-          "stars": 1230,
-          "starsRange": 48,
-          "forks": 151,
+          "stars": 48,
+          "starsRange": 0,
+          "forks": 48,
           "analysis": {
-            "coreIdea": "Apache Ossie 是一个开源语义模型交换标准，旨在统一 AI、分析和 BI 平台之间的语义元数据描述。",
-            "engineeringMethod": "定义供应商无关的语义模型规范，让不同工具通过统一的元数据标准交换数据定义。",
-            "whyItMatters": "AI Agent 和 BI 工具之间数据语义不互通，Ossie 要做语义层的标准协议。",
-            "audience": "数据平台开发者、AI 应用架构师、BI 工具厂商",
+            "coreIdea": "Apache Ossie, industry wide specification effort to standardize how we exchange semantic metadata across analytics, AI and BI platforms, providing a vendor neutral, single source of truth for semantic data",
+            "engineeringMethod": "使用 Python 构建，充分利用异步编程和类型注解提升代码质量和运行效率。",
+            "whyItMatters": "AI 正在重塑各行各业，该项目为开发者提供了实用的 AI 工具和基础设施，降低了 AI 应用开发门槛。",
+            "audience": "Python 开发者、数据工程师",
             "difficulty": "intermediate",
-            "quickStart": "查看 Ossie 规范文档，在数据管道中添加语义模型导出。",
-            "whyItIsHot": "AI Agent 爆发后数据语义标准化成为刚需，Apache 背书让这个项目有成为行业标准的潜力。",
-            "useCase": "AI 分析 Agent 通过 Ossie 标准读取 BI 平台的语义模型，无需配置就能理解指标含义。"
+            "quickStart": "pip install ossie",
+            "whyItIsHot": "AI 领域的创新永不停歇，该项目代表了该方向的最新进展。",
+            "useCase": "数据分析团队使用 ossie 处理每日 TB 级数据，显著缩短数据处理流水线时间。",
+            "_meta": {
+              "category": "ai-ml",
+              "techStack": [
+                "python"
+              ],
+              "topics": [],
+              "firstParagraph": ""
+            }
           },
-          "weeklyAppearances": 1
+          "weeklyAppearances": 2
         },
         {
           "rank": 3,
@@ -52,20 +68,28 @@
           "fullName": "PostHog/posthog",
           "description": "🦔 PostHog is the leading platform for building self-driving products. Our developer tools – AI observability, analytics, session replay, flags, experiments, error tracking, logs, and more – capture all the context agents need to diagnose problems, uncover opportunities, and ship fixes. Steer it all from Slack, web, desktop, or the MCP.",
           "language": "Python",
-          "stars": 36492,
-          "starsRange": 337,
-          "forks": 3023,
+          "stars": 337,
+          "starsRange": 0,
+          "forks": 337,
           "analysis": {
-            "coreIdea": "PostHog 是开源产品分析平台，集成了用户行为分析、会话回放、AI 可观测性和功能开关等工具。",
-            "engineeringMethod": "自托管优先架构，所有数据存储在用户基础设施中，内置 LLM 调用链追踪能力。",
-            "whyItMatters": "AI 应用爆发后开发者需要同时监控用户行为和模型表现，PostHog 整合了这两类数据。",
-            "audience": "AI 应用开发者、产品工程师、独立开发者",
+            "coreIdea": "🦔 PostHog is the leading platform for building self-driving products. Our developer tools – AI observability, analytics, session replay, flags, experiments, error tracking, logs, and more – capture all the context agents need to diagnose problems, uncover opportunities, and ship fixes. Steer it all from Slack, web, desktop, or the MCP.",
+            "engineeringMethod": "采用 Agent 架构，通过感知-决策-执行循环实现自主工作，支持多 Agent 协同。",
+            "whyItMatters": "AI 正在重塑各行各业，该项目为开发者提供了实用的 AI 工具和基础设施，降低了 AI 应用开发门槛。",
+            "audience": "开发者、软件工程师",
             "difficulty": "intermediate",
-            "quickStart": "注册 PostHog Cloud 免费套餐或通过 Docker 自建，几分钟接入前端 SDK。",
-            "whyItIsHot": "AI 应用需同时追踪用户行为和模型表现，PostHog 是少数能把两者整合的开源平台。",
-            "useCase": "AI 聊天产品用 PostHog 追踪用户点击和 LLM 调用链，在一个后台定位模型响应慢的问题。"
+            "quickStart": "pip install posthog",
+            "whyItIsHot": "AI 领域的创新永不停歇，该项目代表了该方向的最新进展。",
+            "useCase": "开发团队将 posthog 集成到 CI/CD 流程中，自动化代码质量检查流程。",
+            "_meta": {
+              "category": "ai-ml",
+              "techStack": [
+                "python"
+              ],
+              "topics": [],
+              "firstParagraph": ""
+            }
           },
-          "weeklyAppearances": 1
+          "weeklyAppearances": 2
         },
         {
           "rank": 4,
@@ -73,20 +97,28 @@
           "fullName": "ibelick/ui-skills",
           "description": "Skills for Design Engineers",
           "language": "TypeScript",
-          "stars": 4879,
-          "starsRange": 242,
-          "forks": 205,
+          "stars": 242,
+          "starsRange": 0,
+          "forks": 242,
           "analysis": {
-            "coreIdea": "UI Skills 是为 AI 代码生成 Agent 提供 UI 技能知识库的 CLI 工具。",
-            "engineeringMethod": "以 npm CLI 形式发布，包含预设 UI 技能分类，Agent 通过 npx 命令获取技能指南。",
-            "whyItMatters": "AI 生成的 UI 代码质量参差不齐，UI Skills 为 Agent 提供结构化设计工程知识。",
-            "audience": "使用 AI 编程助手的前端开发者、Design Engineer",
-            "difficulty": "beginner",
-            "quickStart": "运行 npx ui-skills start，AI Agent 自动获取当前任务所需的 UI 技能。",
-            "whyItIsHot": "AI 编程工具爆发后，如何让 AI 写出更好的 UI 成为刚需。",
-            "useCase": "用 Cursor 开发动画组件时运行 npx ui-skills start，AI 自动获取动画技能库。"
+            "coreIdea": "Skills for Design Engineers",
+            "engineeringMethod": "使用 TypeScript 构建，利用静态类型系统和现代 ECMAScript 特性保证代码质量和开发效率。",
+            "whyItMatters": "该项目精准切中了开发者的实际需求，解决了现有工作流程中的关键痛点。",
+            "audience": "开发者、软件工程师",
+            "difficulty": "intermediate",
+            "quickStart": "npm install ui-skills",
+            "whyItIsHot": "该项目凭借独特的价值主张和优秀的设计，在 GitHub 社区获得持续关注。",
+            "useCase": "开发团队使用 ui-skills 优化日常工作流程，提升开发和运维效率。",
+            "_meta": {
+              "category": "gaming",
+              "techStack": [
+                "typescript"
+              ],
+              "topics": [],
+              "firstParagraph": ""
+            }
           },
-          "weeklyAppearances": 1
+          "weeklyAppearances": 2
         },
         {
           "rank": 5,
@@ -94,20 +126,28 @@
           "fullName": "rohitg00/ai-engineering-from-scratch",
           "description": "Learn it. Build it. Ship it for others.",
           "language": "Python",
-          "stars": 39014,
-          "starsRange": 240,
-          "forks": 6544,
+          "stars": 240,
+          "starsRange": 0,
+          "forks": 240,
           "analysis": {
-            "coreIdea": "从零开始的 AI 工程参考手册，涵盖 503 课、20 个阶段，系统性教授 AI 全栈技能。",
-            "engineeringMethod": "以 GitHub 仓库组织内容，每阶段含理论讲解、代码示例和实践项目。",
-            "whyItMatters": "AI 工程师岗位需求爆发但系统性学习资源稀缺，这份手册免费开源。",
-            "audience": "想转型 AI 工程方向的开发者、计算机专业学生",
+            "coreIdea": "Learn it. Build it. Ship it for others.",
+            "engineeringMethod": "使用 Python 构建，充分利用异步编程和类型注解提升代码质量和运行效率。",
+            "whyItMatters": "该项目将复杂概念以实践方式呈现，是开发者系统学习和深入理解该领域的宝贵资源。",
+            "audience": "设计师、前端开发者",
             "difficulty": "intermediate",
-            "quickStart": "克隆仓库从 Phase 1 开始按顺序学习。",
-            "whyItIsHot": "503 课的系统性 AI 工程手册，满足大量自学者的需求。",
-            "useCase": "后端开发者按手册从 Python 学到 LLM 部署，3 个月完成 AI 转型。"
+            "quickStart": "pip install ai-engineering-from-scratch",
+            "whyItIsHot": "优质的学习资源永远是刚需，该项目填补了该领域系统性学习资源的空白。",
+            "useCase": "学习者通过 ai-engineering-from-scratch 系统掌握该领域核心知识，将理论付诸实践。",
+            "_meta": {
+              "category": "educational",
+              "techStack": [
+                "python"
+              ],
+              "topics": [],
+              "firstParagraph": ""
+            }
           },
-          "weeklyAppearances": 1
+          "weeklyAppearances": 2
         },
         {
           "rank": 6,
@@ -115,20 +155,28 @@
           "fullName": "tirth8205/code-review-graph",
           "description": "Local-first code intelligence graph for MCP and CLI. Builds a persistent map of your codebase so AI coding tools read only what matters, with benchmarked context reductions on reviews and large-repo workflows.",
           "language": "Python",
-          "stars": 20079,
-          "starsRange": 356,
-          "forks": 2123,
+          "stars": 356,
+          "starsRange": 0,
+          "forks": 356,
           "analysis": {
-            "coreIdea": "本地优先的代码智能图谱，为 MCP 和 CLI 构建代码库关系图，让 AI 只读相关代码。",
-            "engineeringMethod": "通过静态分析构建依赖关系图（调用图、继承树、引用链），以图结构存储并与 MCP 集成。",
-            "whyItMatters": "AI 编程工具处理大型仓库时阅读大量无关代码，图谱让 AI 只读该读的部分。",
-            "audience": "AI 编程工具用户、大型代码库维护者、MCP 开发者",
+            "coreIdea": "Local-first code intelligence graph for MCP and CLI. Builds a persistent map of your codebase so AI coding tools read only what matters, with benchmarked context reductions on reviews and large-repo workflows.",
+            "engineeringMethod": "基于管道架构设计，数据处理流程清晰可追溯，支持自定义组件和中间处理环节。",
+            "whyItMatters": "该项目专注于大规模场景下的可靠性，为企业和团队提供了可扩展的解决方案。",
+            "audience": "设计师、前端开发者",
             "difficulty": "intermediate",
-            "quickStart": "pip install code-review-graph，在项目目录运行 crg index。",
-            "whyItIsHot": "AI 编程越流行 Token 浪费问题越突出，图结构精准定位相关代码切中痛点。",
-            "useCase": "大型 monorepo 用 code-review-graph 索引后，AI Token 消耗降低 70%。"
+            "quickStart": "pip install code-review-graph",
+            "whyItIsHot": "AI 领域的创新永不停歇，该项目代表了该方向的最新进展。",
+            "useCase": "开发团队将 code-review-graph 集成到 CI/CD 流程中，自动化代码质量检查流程。",
+            "_meta": {
+              "category": "ai-ml",
+              "techStack": [
+                "python"
+              ],
+              "topics": [],
+              "firstParagraph": ""
+            }
           },
-          "weeklyAppearances": 1
+          "weeklyAppearances": 2
         },
         {
           "rank": 7,
@@ -136,20 +184,28 @@
           "fullName": "elder-plinius/G0DM0D3",
           "description": "LIBERATED AI CHAT",
           "language": "TypeScript",
-          "stars": 9448,
-          "starsRange": 63,
-          "forks": 2252,
+          "stars": 63,
+          "starsRange": 0,
+          "forks": 63,
           "analysis": {
-            "coreIdea": "完全开源的多模型聊天界面，支持 60+ OpenRouter 模型和本地模型，用于 AI 安全研究。",
-            "engineeringMethod": "多供应商模型支持，GODMODE CLASSIC 并行对比和 ULTRAPLINIAN 多层级评估引擎。",
-            "whyItMatters": "主流 AI 聊天界面有使用限制，G0DM0D3 提供不受约束的研究实验平台。",
-            "audience": "AI 安全研究员、红队测试人员、系统黑客",
-            "difficulty": "advanced",
-            "quickStart": "克隆仓库，配置 OpenRouter Key，运行 npm start。",
-            "whyItIsHot": "AI 安全和对齐研究热度持续高涨，G0DM0D3 是强大的开源研究工具。",
-            "useCase": "安全研究员用 ULTRAPLINIAN 同时用 60 个模型测试 prompt injection 攻击效果。"
+            "coreIdea": "LIBERATED AI CHAT",
+            "engineeringMethod": "使用 TypeScript 构建，利用静态类型系统和现代 ECMAScript 特性保证代码质量和开发效率。",
+            "whyItMatters": "AI 正在重塑各行各业，该项目为开发者提供了实用的 AI 工具和基础设施，降低了 AI 应用开发门槛。",
+            "audience": "前端开发者、全栈工程师",
+            "difficulty": "intermediate",
+            "quickStart": "npm install g0dm0d3",
+            "whyItIsHot": "AI 领域的创新永不停歇，该项目代表了该方向的最新进展。",
+            "useCase": "企业使用 G0DM0D3 构建智能客服系统，大幅降低人工客服成本并提升响应速度。",
+            "_meta": {
+              "category": "ai-ml",
+              "techStack": [
+                "typescript"
+              ],
+              "topics": [],
+              "firstParagraph": ""
+            }
           },
-          "weeklyAppearances": 1
+          "weeklyAppearances": 2
         },
         {
           "rank": 8,
@@ -157,20 +213,28 @@
           "fullName": "lyogavin/airllm",
           "description": "AirLLM 70B inference with single 4GB GPU",
           "language": "Jupyter Notebook",
-          "stars": 23254,
-          "starsRange": 242,
-          "forks": 2652,
+          "stars": 242,
+          "starsRange": 0,
+          "forks": 242,
           "analysis": {
-            "coreIdea": "AirLLM 让 70B 大模型在单张 4GB GPU 上运行推理，无需量化或剪枝。",
-            "engineeringMethod": "分层推理和内存卸载技术，只将当前计算需要的层加载到显存，其余在 CPU 内存。",
-            "whyItMatters": "大模型推理通常需要多张高端 GPU，AirLLM 让消费级显卡也能跑 70B 模型。",
-            "audience": "希望本地运行大模型的个人开发者、资源受限的研究团队",
+            "coreIdea": "AirLLM 70B inference with single 4GB GPU",
+            "engineeringMethod": "采用模块化架构设计，注重代码可维护性和可扩展性，遵循行业最佳实践。",
+            "whyItMatters": "AI 正在重塑各行各业，该项目为开发者提供了实用的 AI 工具和基础设施，降低了 AI 应用开发门槛。",
+            "audience": "软件开发者、技术爱好者",
             "difficulty": "intermediate",
-            "quickStart": "pip install airllm，参考示例加载 70B 模型运行推理。",
-            "whyItIsHot": "大模型参数持续增长但多数开发者只有消费级 GPU，AirLLM 解决了硬件瓶颈。",
-            "useCase": "个人开发者用 RTX 3060 通过 AirLLM 运行 Llama 3.1 70B 完成 RAG 应用开发。"
+            "quickStart": "克隆仓库，按 README 指引完成配置和运行。",
+            "whyItIsHot": "AI 领域的创新永不停歇，该项目代表了该方向的最新进展。",
+            "useCase": "AI 团队使用 airllm 构建和部署机器学习模型，加速从实验到生产的迭代周期。",
+            "_meta": {
+              "category": "ai-ml",
+              "techStack": [
+                "jupyter notebook"
+              ],
+              "topics": [],
+              "firstParagraph": ""
+            }
           },
-          "weeklyAppearances": 1
+          "weeklyAppearances": 2
         },
         {
           "rank": 9,
@@ -178,20 +242,29 @@
           "fullName": "KnockOutEZ/wigolo",
           "description": "The go-to web for your AI coding agent — local-first search, fetch, crawl & research over MCP. No API keys, no cloud, $0/query. Public beta.",
           "language": "TypeScript",
-          "stars": 1119,
-          "starsRange": 192,
-          "forks": 80,
+          "stars": 192,
+          "starsRange": 0,
+          "forks": 192,
           "analysis": {
-            "coreIdea": "本地优先的网页智能工具，为 AI Agent 提供搜索、爬取和研究能力，无需 API Key。",
-            "engineeringMethod": "通过 MCP 协议暴露 web 工具（搜索、fetch、crawl、extract），全部本地执行。",
-            "whyItMatters": "AI Agent 需要上网能力但不想绑付费 API，wigolo 提供零成本本地方案。",
-            "audience": "AI Agent 开发者、Claude Code/Cursor 用户",
-            "difficulty": "beginner",
-            "quickStart": "npx wigolo 启动，配置 MCP 即可让 AI 搜索网页。",
-            "whyItIsHot": "AI 编程工具爆火后 Agent 需要上网能力，免费本地方案成了最佳选择。",
-            "useCase": "Claude Code 通过 wigolo 直接搜索最新文档和 API 参考，全程本地运行。"
+            "coreIdea": "The go-to web for your AI coding agent — local-first search, fetch, crawl & research over MCP. No API keys, no cloud, $0/query. Public beta.",
+            "engineeringMethod": "采用 Agent 架构，通过感知-决策-执行循环实现自主工作，支持多 Agent 协同。",
+            "whyItMatters": "AI 正在重塑各行各业，该项目为开发者提供了实用的 AI 工具和基础设施，降低了 AI 应用开发门槛。",
+            "audience": "前端开发者、全栈工程师",
+            "difficulty": "intermediate",
+            "quickStart": "npm install wigolo",
+            "whyItIsHot": "AI 领域的创新永不停歇，该项目代表了该方向的最新进展。",
+            "useCase": "AI 团队使用 wigolo 构建和部署机器学习模型，加速从实验到生产的迭代周期。",
+            "_meta": {
+              "category": "ai-ml",
+              "techStack": [
+                "go",
+                "typescript"
+              ],
+              "topics": [],
+              "firstParagraph": ""
+            }
           },
-          "weeklyAppearances": 1
+          "weeklyAppearances": 2
         },
         {
           "rank": 10,
@@ -199,20 +272,57 @@
           "fullName": "codecrafters-io/build-your-own-x",
           "description": "Master programming by recreating your favorite technologies from scratch.",
           "language": "Markdown",
-          "stars": 528102,
-          "starsRange": 1131,
-          "forks": 49976,
+          "stars": 1131,
+          "starsRange": 0,
+          "forks": 1131,
           "analysis": {
-            "coreIdea": "精选编程教程合集，从零重建各种热门技术（数据库、Docker、Git 等），通过动手实践深入理解原理。",
-            "engineeringMethod": "每个教程以从零开始构建 X 为形式，提供结构化步骤、代码示例和原理讲解。",
-            "whyItMatters": "费曼学习法的最好实践 - 不能创造的，就没有真正理解。",
-            "audience": "初中级程序员、计算机专业学生、想深入理解系统原理的开发者",
+            "coreIdea": "Master programming by recreating your favorite technologies from scratch.",
+            "engineeringMethod": "采用模块化架构设计，注重代码可维护性和可扩展性，遵循行业最佳实践。",
+            "whyItMatters": "该项目精准切中了开发者的实际需求，解决了现有工作流程中的关键痛点。",
+            "audience": "软件开发者、技术爱好者",
             "difficulty": "intermediate",
-            "quickStart": "选择感兴趣的技术，按教程逐步编码实现。",
-            "whyItIsHot": "528K Star 说明一切，GitHub 最经典的学习资源。",
-            "useCase": "前端开发者通过教程用 Go 实现简化版容器，理解 Linux Namespace 核心概念。"
+            "quickStart": "克隆仓库，按 README 指引完成配置和运行。",
+            "whyItIsHot": "该项目凭借独特的价值主张和优秀的设计，在 GitHub 社区获得持续关注。",
+            "useCase": "开发团队将 build-your-own-x 集成到 CI/CD 流程中，自动化代码质量检查流程。",
+            "_meta": {
+              "category": "other",
+              "techStack": [
+                "markdown"
+              ],
+              "topics": [],
+              "firstParagraph": ""
+            }
           },
-          "weeklyAppearances": 1
+          "weeklyAppearances": 2
+        },
+        {
+          "rank": 11,
+          "name": "kimi-cli",
+          "fullName": "MoonshotAI/kimi-cli",
+          "description": "Kimi Code CLI is your next CLI agent.",
+          "language": "Python",
+          "stars": 48,
+          "starsRange": 0,
+          "forks": 48,
+          "analysis": {
+            "coreIdea": "Kimi Code CLI is your next CLI agent.",
+            "engineeringMethod": "采用 Agent 架构，通过感知-决策-执行循环实现自主工作，支持多 Agent 协同。",
+            "whyItMatters": "命令行工具是开发者日常效率的基石，该项目提供更优秀的终端体验。",
+            "audience": "Python 开发者、数据工程师",
+            "difficulty": "intermediate",
+            "quickStart": "pip install kimi-cli",
+            "whyItIsHot": "该项目凭借独特的价值主张和优秀的设计，在 GitHub 社区获得持续关注。",
+            "useCase": "开发团队将 kimi-cli 集成到 CI/CD 流程中，自动化代码质量检查流程。",
+            "_meta": {
+              "category": "cli-tool",
+              "techStack": [
+                "python"
+              ],
+              "topics": [],
+              "firstParagraph": ""
+            }
+          },
+          "weeklyAppearances": 2
         }
       ],
       "weekly": [
@@ -222,11 +332,11 @@
           "fullName": "Nutlope/hallmark",
           "description": "Anti-AI-slop design skill for Claude Code, Cursor, and Codex.",
           "language": "CSS",
-          "stars": 12736,
+          "stars": 8075,
           "starsRange": 0,
-          "forks": 633,
+          "forks": 8075,
           "analysis": null,
-          "weeklyAppearances": 0
+          "weeklyAppearances": 1
         },
         {
           "rank": 2,
@@ -234,11 +344,11 @@
           "fullName": "OpenCut-app/OpenCut",
           "description": "The open-source CapCut alternative",
           "language": "TypeScript",
-          "stars": 75343,
+          "stars": 12718,
           "starsRange": 0,
-          "forks": 7584,
+          "forks": 12718,
           "analysis": null,
-          "weeklyAppearances": 0
+          "weeklyAppearances": 1
         },
         {
           "rank": 3,
@@ -246,11 +356,11 @@
           "fullName": "Shubhamsaboo/awesome-llm-apps",
           "description": "100+ AI Agent & RAG apps you can actually run — clone, customize, ship.",
           "language": "Python",
-          "stars": 123944,
+          "stars": 6252,
           "starsRange": 0,
-          "forks": 18282,
+          "forks": 6252,
           "analysis": null,
-          "weeklyAppearances": 0
+          "weeklyAppearances": 1
         },
         {
           "rank": 4,
@@ -258,11 +368,11 @@
           "fullName": "HKUDS/Vibe-Trading",
           "description": "\"Vibe-Trading: Your Personal Trading Agent\"",
           "language": "Python",
-          "stars": 24930,
+          "stars": 5616,
           "starsRange": 0,
-          "forks": 4113,
+          "forks": 5616,
           "analysis": null,
-          "weeklyAppearances": 0
+          "weeklyAppearances": 1
         },
         {
           "rank": 5,
@@ -270,11 +380,11 @@
           "fullName": "HKUDS/DeepTutor",
           "description": "DeepTutor: Lifelong Personalized Tutoring. https://deeptutor.info/.",
           "language": "Python",
-          "stars": 27624,
+          "stars": 1801,
           "starsRange": 0,
-          "forks": 3670,
+          "forks": 1801,
           "analysis": null,
-          "weeklyAppearances": 0
+          "weeklyAppearances": 1
         },
         {
           "rank": 6,
@@ -282,11 +392,11 @@
           "fullName": "iOfficeAI/OfficeCLI",
           "description": "OfficeCLI is the first and best Office suite purpose-built for AI agents to read, edit, and automate Word, Excel, and PowerPoint files. Free, open-source, single binary, no Office installation required.",
           "language": "C#",
-          "stars": 19225,
+          "stars": 4611,
           "starsRange": 0,
-          "forks": 1294,
+          "forks": 4611,
           "analysis": null,
-          "weeklyAppearances": 0
+          "weeklyAppearances": 1
         },
         {
           "rank": 7,
@@ -294,11 +404,11 @@
           "fullName": "mattpocock/skills",
           "description": "Skills for Real Engineers. Straight from my .agents directory.",
           "language": "Shell",
-          "stars": 176417,
+          "stars": 11325,
           "starsRange": 0,
-          "forks": 15114,
+          "forks": 11325,
           "analysis": null,
-          "weeklyAppearances": 0
+          "weeklyAppearances": 1
         },
         {
           "rank": 8,
@@ -306,11 +416,11 @@
           "fullName": "kangarooking/cangjie-skill",
           "description": "把书、长视频、播客等高价值内容蒸馏成可执行的 Agent Skills",
           "language": "Python",
-          "stars": 3646,
+          "stars": 1158,
           "starsRange": 0,
-          "forks": 523,
+          "forks": 1158,
           "analysis": null,
-          "weeklyAppearances": 0
+          "weeklyAppearances": 1
         },
         {
           "rank": 9,
@@ -318,11 +428,11 @@
           "fullName": "wonderwhy-er/DesktopCommanderMCP",
           "description": "This is MCP server for Claude that gives it terminal control, file system search and diff file editing capabilities",
           "language": "TypeScript",
-          "stars": 8497,
+          "stars": 1657,
           "starsRange": 0,
-          "forks": 940,
+          "forks": 1657,
           "analysis": null,
-          "weeklyAppearances": 0
+          "weeklyAppearances": 1
         },
         {
           "rank": 10,
@@ -330,11 +440,11 @@
           "fullName": "openai/codex",
           "description": "Lightweight coding agent that runs in your terminal",
           "language": "Rust",
-          "stars": 99359,
+          "stars": 2250,
           "starsRange": 0,
-          "forks": 14872,
+          "forks": 2250,
           "analysis": null,
-          "weeklyAppearances": 0
+          "weeklyAppearances": 1
         }
       ],
       "monthly": [
@@ -344,11 +454,11 @@
           "fullName": "calesthio/OpenMontage",
           "description": "World's first open-source, agentic video production system. 12 pipelines, 52 tools, 500+ agent skills. Turn your AI coding assistant into a full video production studio.",
           "language": "Python",
-          "stars": 39765,
+          "stars": 34748,
           "starsRange": 0,
-          "forks": 4709,
+          "forks": 34748,
           "analysis": null,
-          "weeklyAppearances": 0
+          "weeklyAppearances": 1
         },
         {
           "rank": 2,
@@ -356,11 +466,11 @@
           "fullName": "DeusData/codebase-memory-mcp",
           "description": "High-performance code intelligence MCP server. Indexes codebases into a persistent knowledge graph — average repo in milliseconds. 158 languages, sub-ms queries, 99% fewer tokens. Single static binary, zero dependencies.",
           "language": "C",
-          "stars": 32652,
+          "stars": 28151,
           "starsRange": 0,
-          "forks": 2492,
+          "forks": 28151,
           "analysis": null,
-          "weeklyAppearances": 0
+          "weeklyAppearances": 1
         },
         {
           "rank": 3,
@@ -368,11 +478,11 @@
           "fullName": "kunchenguid/no-mistakes",
           "description": "git push no-mistakes",
           "language": "Go",
-          "stars": 6488,
+          "stars": 5063,
           "starsRange": 0,
-          "forks": 482,
+          "forks": 5063,
           "analysis": null,
-          "weeklyAppearances": 0
+          "weeklyAppearances": 1
         },
         {
           "rank": 4,
@@ -380,11 +490,11 @@
           "fullName": "usestrix/strix",
           "description": "Open-source AI penetration testing tool to find and fix your app’s vulnerabilities.",
           "language": "Python",
-          "stars": 42410,
+          "stars": 16488,
           "starsRange": 0,
-          "forks": 4375,
+          "forks": 16488,
           "analysis": null,
-          "weeklyAppearances": 0
+          "weeklyAppearances": 1
         },
         {
           "rank": 5,
@@ -392,11 +502,11 @@
           "fullName": "asgeirtj/system_prompts_leaks",
           "description": "Extracted system prompts from Anthropic - Claude Fable 5, Opus 4.8, Claude Code, Claude Design. OpenAI - ChatGPT GPT-5.6, Codex GPT-5.6, GPT-5.5. Google - Gemini 3.5 Flash, 3.1 Pro, Antigravity. xAI - Grok, Cursor, Copilot, VS Code, Perplexity, and more. Updated regularly.",
           "language": "JavaScript",
-          "stars": 58825,
+          "stars": 15885,
           "starsRange": 0,
-          "forks": 9605,
+          "forks": 15885,
           "analysis": null,
-          "weeklyAppearances": 0
+          "weeklyAppearances": 1
         },
         {
           "rank": 6,
@@ -404,11 +514,11 @@
           "fullName": "stablyai/orca",
           "description": "Orca is the ADE for working with a fleet of parallel agents. Run any coding agent with your own subscription. Available on desktop and mobile.",
           "language": "TypeScript",
-          "stars": 21697,
+          "stars": 16048,
           "starsRange": 0,
-          "forks": 1559,
+          "forks": 16048,
           "analysis": null,
-          "weeklyAppearances": 0
+          "weeklyAppearances": 1
         },
         {
           "rank": 7,
@@ -416,11 +526,11 @@
           "fullName": "ogulcancelik/herdr",
           "description": "agent multiplexer that lives in your terminal.",
           "language": "Rust",
-          "stars": 17928,
+          "stars": 11568,
           "starsRange": 0,
-          "forks": 1144,
+          "forks": 11568,
           "analysis": null,
-          "weeklyAppearances": 0
+          "weeklyAppearances": 1
         },
         {
           "rank": 8,
@@ -428,11 +538,11 @@
           "fullName": "Zackriya-Solutions/meetily",
           "description": "Privacy first, AI meeting assistant with 4x faster Parakeet/Whisper live transcription, speaker diarization, and Ollama summarization built on Rust. 100% local processing. no cloud required. Meetily (Meetly Ai - https://meetily.ai) is the #1 Self-hosted, Open-source Ai meeting note taker for macOS & Windows. Understand How to write meeting minutes",
           "language": "Rust",
-          "stars": 25422,
+          "stars": 12699,
           "starsRange": 0,
-          "forks": 2550,
+          "forks": 12699,
           "analysis": null,
-          "weeklyAppearances": 0
+          "weeklyAppearances": 1
         },
         {
           "rank": 9,
@@ -440,11 +550,11 @@
           "fullName": "diegosouzapw/OmniRoute",
           "description": "Never stop coding. Free AI gateway: one endpoint, 231+ providers (50+ free), connect Claude Code, Codex, Cursor, Cline & Copilot to FREE Claude/GPT/Gemini. RTK+Caveman stacked compression saves 15-95% tokens, smart auto-fallback, MCP/A2A, multimodal APIs, Desktop/PWA.",
           "language": "TypeScript",
-          "stars": 18652,
+          "stars": 12026,
           "starsRange": 0,
-          "forks": 2675,
+          "forks": 12026,
           "analysis": null,
-          "weeklyAppearances": 0
+          "weeklyAppearances": 1
         },
         {
           "rank": 10,
@@ -452,11 +562,11 @@
           "fullName": "alibaba/page-agent",
           "description": "JavaScript in-page GUI agent. Control web interfaces with natural language.",
           "language": "TypeScript",
-          "stars": 27012,
+          "stars": 8521,
           "starsRange": 0,
-          "forks": 2364,
+          "forks": 8521,
           "analysis": null,
-          "weeklyAppearances": 0
+          "weeklyAppearances": 1
         }
       ]
     }
