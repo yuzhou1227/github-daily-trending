@@ -1,0 +1,38 @@
+---
+export interface Props {
+  title: string;
+  content: string;
+  highlight?: boolean;
+}
+
+const { title, content, highlight } = Astro.props;
+---
+
+<div class="analysis-card" class:list={{ highlight }}>
+  <h3 class="card-title">{title}</h3>
+  <p class="card-content">{content}</p>
+</div>
+
+<style>
+  .analysis-card {
+    background: var(--bg-sidebar);
+    border-radius: 8px;
+    padding: 14px;
+  }
+  .analysis-card.highlight {
+    background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 10%, var(--bg-card)), var(--bg-card));
+    border-left: 3px solid var(--accent);
+  }
+  .card-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+  .card-content {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-primary);
+  }
+</style>

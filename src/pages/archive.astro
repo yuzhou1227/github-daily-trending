@@ -1,0 +1,60 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { readFileSync, existsSync } from 'fs';
+import { join } from 'path';
+
+const dataPath = join(process.cwd(), 'data', 'data.json');
+const allData = existsSync(dataPath) ? JSON.parse(readFileSync(dataPath, 'utf-8')) : {};
+const dates = Object.keys(allData).sort().reverse();
+---
+
+<BaseLayout title="历史归档">
+  <Header />
+  <main class="container archive-page">
+    <h2 class="page-title">历史榜单</h2>
+    {dates.length > 0 ? (
+      <div class="date-list">
+        {dates.map(date => {
+          const day = allData[date];
+          const count = day?.ranges?.daily?.length || 0;
+          const top1 = day?.ranges?.daily?.[0];
+          return (
+            <a href={`/github-daily-trending/archive/${date}`} class="date-card">
+              <span class="date">{date}</span>
+              <span class="count">{count} 个项目</span>
+              {top1 && <span class="top-item">🏆 {top1.fullName}</span>}
+            </a>
+          );
+        })}
+      </div>
+    ) : (
+      <p class="no-data">暂无历史数据</p>
+    )}
+  </main>
+  <Footer />
+</BaseLayout>
+
+<style>
+  .archive-page { padding-top: 24px; padding-bottom: 24px; }
+  .page-title { font-size: 20px; margin-bottom: 16px; }
+  .date-list { display: flex; flex-direction: column; gap: 8px; }
+  .date-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 16px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    text-decoration: none;
+    color: var(--text-primary);
+    transition: border-color 0.15s;
+  }
+  .date-card:hover { border-color: var(--accent); }
+  .date { font-weight: 700; font-size: 15px; min-width: 100px; }
+  .count { font-size: 13px; color: var(--text-secondary); }
+  .top-item { font-size: 13px; color: var(--accent); margin-left: auto; }
+  .no-data { color: var(--text-secondary); text-align: center; padding: 60px 0; }
+</style>

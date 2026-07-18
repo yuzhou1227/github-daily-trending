@@ -1,0 +1,86 @@
+---
+export interface Props {
+  project: any | null;
+}
+
+const { project } = Astro.props;
+const analysis = project?.analysis;
+---
+
+<div class="side-panel">
+  {project && analysis ? (
+    <>
+      <div class="section">
+        <h3 class="section-title">WHY IT IS HOT</h3>
+        <p class="section-content">{analysis.whyItIsHot}</p>
+      </div>
+      <div class="section">
+        <h3 class="section-title">USE CASE</h3>
+        <p class="section-content">{analysis.useCase}</p>
+      </div>
+      <div class="section">
+        <h3 class="section-title">仓库信息</h3>
+        <div class="info-row"><span>⭐ Stars</span><span>{project.stars.toLocaleString()}</span></div>
+        <div class="info-row"><span>▲ 今日涨星</span><span>{project.starsRange.toLocaleString()}</span></div>
+        <div class="info-row"><span>🍴 Forks</span><span>{project.forks?.toLocaleString() || '-'}</span></div>
+        <div class="info-row"><span>🔤 语言</span><span>{project.language || 'N/A'}</span></div>
+      </div>
+      <div class="section">
+        <a href={`https://github.com/${project.fullName}`} target="_blank" class="gh-link">
+          在 GitHub 上查看 →
+        </a>
+      </div>
+    </>
+  ) : (
+    <div class="empty-side">
+      <p>选择项目以查看详情</p>
+    </div>
+  )}
+</div>
+
+<style>
+  .side-panel { display: flex; flex-direction: column; gap: 16px; }
+  .section {
+    background: var(--bg-sidebar);
+    border-radius: 8px;
+    padding: 14px;
+  }
+  .section-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .section-content {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-primary);
+  }
+  .info-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .info-row:last-child { border-bottom: none; }
+  .gh-link {
+    display: block;
+    text-align: center;
+    padding: 10px;
+    background: var(--accent);
+    color: white;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+  }
+  .gh-link:hover { background: var(--accent-hover); }
+  .empty-side {
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 14px;
+    padding: 40px 0;
+  }
+</style>

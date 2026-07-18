@@ -1,0 +1,90 @@
+---
+export interface Props {
+  rank: number;
+  name: string;
+  fullName: string;
+  stars: number;
+  starsRange: number;
+  language: string;
+  isActive: boolean;
+  analysis: any | null;
+  weeklyAppearances: number;
+}
+
+const { rank, name, starsRange, language, isActive, analysis, weeklyAppearances } = Astro.props;
+---
+
+<li class="rank-item" class:list={{ active: isActive }}>
+  <span class="rank-num">#{rank}</span>
+  <div class="rank-info">
+    <span class="rank-name">{name}</span>
+    <div class="rank-meta">
+      <span class="stars">⭐ {starsRange.toLocaleString()}</span>
+      {language && <span class="lang-tag">{language}</span>}
+      {weeklyAppearances > 1 && <span class="week-tag">周{weeklyAppearances}次</span>}
+    </div>
+  </div>
+  {analysis === null && <span class="pending-badge">AI 生成中</span>}
+</li>
+
+<style>
+  .rank-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.15s;
+    list-style: none;
+  }
+  .rank-item:hover { background: var(--bg-sidebar); }
+  .rank-item.active {
+    background: color-mix(in srgb, var(--accent) 15%, var(--bg-card));
+    border-left: 3px solid var(--accent);
+  }
+  .rank-num {
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--accent);
+    min-width: 28px;
+  }
+  .rank-info { flex: 1; min-width: 0; }
+  .rank-name {
+    font-weight: 600;
+    font-size: 14px;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .rank-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 2px;
+  }
+  .lang-tag {
+    background: var(--tag-bg);
+    color: var(--tag-text);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 11px;
+  }
+  .week-tag {
+    background: #2d1b69;
+    color: #a78bfa;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 11px;
+  }
+  .pending-badge {
+    font-size: 11px;
+    color: var(--text-secondary);
+    background: var(--bg-sidebar);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+</style>

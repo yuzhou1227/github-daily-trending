@@ -1,0 +1,42 @@
+---
+import ThemeToggle from './ThemeToggle.astro';
+---
+
+<header class="header">
+  <div class="container header-inner">
+    <div class="brand">
+      <h1>DAILY GITHUB TRENDING</h1>
+      <span class="subtitle">/ TOP 10</span>
+    </div>
+    <nav class="nav">
+      <a href="/github-daily-trending/" class="nav-link">今日</a>
+      <a href="/github-daily-trending/archive" class="nav-link">归档</a>
+    </nav>
+    <ThemeToggle />
+  </div>
+</header>
+
+<style>
+  .header {
+    border-bottom: 1px solid var(--border);
+    padding: 12px 0;
+    background: var(--bg-card);
+  }
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .brand { display: flex; align-items: baseline; gap: 4px; }
+  .brand h1 { font-size: 18px; font-weight: 700; letter-spacing: 1px; }
+  .subtitle { font-size: 14px; color: var(--text-secondary); }
+  .nav { display: flex; gap: 8px; }
+  .nav-link {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 14px;
+    padding: 4px 12px;
+    border-radius: 6px;
+  }
+  .nav-link:hover { color: var(--accent); background: var(--bg-sidebar); }
+</style>

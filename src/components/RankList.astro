@@ -1,0 +1,52 @@
+---
+import RankItem from './RankItem.astro';
+
+export interface Props {
+  daily: any[];
+  weekly: any[];
+  monthly: any[];
+  activeRange: string;
+  selectedIndex: number;
+}
+
+const { daily, weekly, monthly, activeRange, selectedIndex } = Astro.props;
+const ranges = [
+  { key: 'daily', label: '每日' },
+  { key: 'weekly', label: '每周' },
+  { key: 'monthly', label: '每月' },
+];
+const currentItems = activeRange === 'daily' ? daily : activeRange === 'weekly' ? weekly : monthly;
+const rangeLabels = { daily: '日榜', weekly: '周榜', monthly: '月榜' };
+---
+
+<div class="rank-list">
+  <div class="tab-bar">
+    {ranges.map(r => (
+      <button
+        class="tab-btn"
+        class:list={{ active: activeRange === r.key }}
+        data-range={r.key}
+      >
+        {r.label}
+      </button>
+    ))}
+  </div>
+  <div class="list-title">
+    TOP 10 <span class="range-label">{rangeLabels[activeRange]}</span>
+  </div>
+  <ul class="items" id="rank-items">
+    {currentItems.slice(0, 10).map((item, i) => (
+      <RankItem
+        rank={item.rank}
+        name={item.name}
+        fullName={item.fullName}
+        stars={item.stars}
+        starsRange={item.starsRange}
+        language={item.language}
+        isActive={i === selectedIndex}
+        analysis={item.analysis}
+        weeklyAppearances={item.weeklyAppearances}
+      />
+    ))}
+  </ul>
+</div>

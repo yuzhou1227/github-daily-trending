@@ -1,0 +1,93 @@
+---
+import AnalysisCard from './AnalysisCard.astro';
+
+export interface Props {
+  project: any | null;
+}
+
+const { project } = Astro.props;
+---
+
+{project ? (
+  <div class="project-detail">
+    <div class="detail-header">
+      <h2 class="project-name">{project.fullName}</h2>
+      <p class="project-desc">{project.description}</p>
+      <div class="project-tags">
+        {project.language && <span class="tag lang">{project.language}</span>}
+        <span class="tag stars">⭐ {project.stars.toLocaleString()} stars</span>
+        <span class="tag today">▲ {project.starsRange.toLocaleString()} today</span>
+        {project.weeklyAppearances > 1 && (
+          <span class="tag weekly">本周上日榜 {project.weeklyAppearances} 次</span>
+        )}
+      </div>
+    </div>
+
+    {project.analysis ? (
+      <div class="analysis-grid">
+        <AnalysisCard title="CORE IDEA" content={project.analysis.coreIdea} />
+        <AnalysisCard title="ENGINEERING METHOD" content={project.analysis.engineeringMethod} />
+        <AnalysisCard title="WHY IT MATTERS" content={project.analysis.whyItMatters} highlight />
+        <div class="split-row">
+          <div class="split-item">
+            <h3 class="split-label">AUDIENCE</h3>
+            <p>{project.analysis.audience}</p>
+          </div>
+          <div class="split-item">
+            <h3 class="split-label">DIFFICULTY</h3>
+            <p class="diff-level">{project.analysis.difficulty}</p>
+          </div>
+        </div>
+        <AnalysisCard title="QUICK START" content={project.analysis.quickStart} />
+      </div>
+    ) : (
+      <div class="loading-analysis">
+        <div class="loading-icon">⏳</div>
+        <p>AI 分析生成中</p>
+        <p class="loading-hint">项目详情将在下次自动更新时补充</p>
+      </div>
+    )}
+  </div>
+) : (
+  <div class="empty-state">选择一个项目查看详情</div>
+)}
+
+<style>
+  .empty-state {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: var(--text-secondary);
+    font-size: 15px;
+  }
+  .project-detail { display: flex; flex-direction: column; gap: 16px; }
+  .detail-header { margin-bottom: 4px; }
+  .project-name { font-size: 22px; font-weight: 700; }
+  .project-desc { color: var(--text-secondary); font-size: 14px; margin-top: 4px; }
+  .project-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .tag {
+    font-size: 12px; padding: 3px 8px; border-radius: 6px;
+    background: var(--tag-bg); color: var(--tag-text);
+  }
+  .tag.stars { background: #fef3c7; color: #92400e; }
+  .tag.today { background: #fce7f3; color: #9d174d; }
+  .tag.weekly { background: #2d1b69; color: #a78bfa; }
+  [data-theme="dark"] .tag.stars { background: #713f12; color: #fde68a; }
+  [data-theme="dark"] .tag.today { background: #831843; color: #fbcfe8; }
+  .analysis-grid { display: flex; flex-direction: column; gap: 10px; }
+  .split-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .split-item {
+    background: var(--bg-sidebar); border-radius: 8px; padding: 14px;
+  }
+  .split-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 1px;
+    color: var(--accent); margin-bottom: 4px;
+  }
+  .diff-level { color: var(--tag-text); font-weight: 600; }
+  .loading-analysis {
+    padding: 40px; text-align: center; color: var(--text-secondary);
+  }
+  .loading-icon { font-size: 32px; margin-bottom: 8px; }
+  .loading-hint { font-size: 13px; margin-top: 4px; opacity: 0.7; }
+</style>

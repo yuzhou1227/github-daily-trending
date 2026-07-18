@@ -1,0 +1,131 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import RankList from '../components/RankList.astro';
+import ProjectDetail from '../components/ProjectDetail.astro';
+import SidePanel from '../components/SidePanel.astro';
+import Footer from '../components/Footer.astro';
+import { readFileSync, existsSync } from 'fs';
+import { join } from 'path';
+
+const dataPath = join(process.cwd(), 'data', 'data.json');
+const allData = existsSync(dataPath) ? JSON.parse(readFileSync(dataPath, 'utf-8')) : {};
+const dates = Object.keys(allData).sort().reverse();
+const latestDate = dates[0] || '';
+const todayData = latestDate ? allData[latestDate] : null;
+const daily = todayData?.ranges?.daily || [];
+const weekly = todayData?.ranges?.weekly || [];
+const monthly = todayData?.ranges?.monthly || [];
+const lastUpdated = todayData?.generatedAt || '';
+const defaultProject = daily[0] || null;
+---
+
+<BaseLayout title="今日榜单" date={latestDate}>
+  <Header />
+  <main class="container main-layout" id="app">
+    <div class="panel left-panel">
+      <RankList {daily} {weekly} {monthly} activeRange="daily" selectedIndex={0} />
+    </div>
+    <div class="panel center-panel" id="detail-panel">
+      <ProjectDetail project={defaultProject} />
+    </div>
+    <div class="panel right-panel" id="side-panel">
+      <SidePanel project={defaultProject} />
+    </div>
+  </main>
+  {lastUpdated && (
+    <div class="status-bar container">
+      <span class="update-info">上次更新：{new Date(lastUpdated).toLocaleString('zh-CN')}</span>
+      {Date.now() - new Date(lastUpdated).getTime() > 26 * 3600000 && (
+        <span class="stale-warning">⚠️ 数据已超过 24 小时未更新</span>
+      )}
+    </div>
+  )}
+  <Footer />
+</BaseLayout>
+
+<script define:vars={{ allData, latestDate }}>
+  const data = allData[latestDate];
+  if (!data) throw new Error('no data');
+
+  const $ = (sel) => document.querySelector(sel);
+  const detailPanel = document.getElementById('detail-panel');
+  const sidePanel = document.getElementById('side-panel');
+  const itemsContainer = document.getElementById('rank-items');
+
+  let state = { range: 'daily', index: 0 };
+
+  function getItems() {
+    return data.ranges[state.range] || [];
+  }
+
+  function render(project) {
+    if (!project) {
+      detailPanel.innerHTML = '<div class="panel" style="display:flex;align-items:center;justify-content:center;color:var(--text-secondary)">选择项目查看详情</div>';
+      sidePanel.innerHTML = '<div class="panel" style="display:flex;align-items:center;justify-content:center;color:var(--text-secondary)">选择项目以查看详情</div>';
+      return;
+    }
+    import('/src/components/ProjectDetail.astro').then(m => {});
+    // Use fetch to get rendered HTML for selected project (alternative: client render)
+  }
+
+  // Event delegation for rank items
+  itemsContainer?.addEventListener('click', (e) => {
+    const item = e.target.closest('.rank-item');
+    if (!item) return;
+    const allItems = Array.from(itemsContainer.querySelectorAll('.rank-item'));
+    const newIndex = allItems.indexOf(item);
+    if (newIndex === -1 || newIndex === state.index) return;
+    state.index = newIndex;
+    const project = getItems()[newIndex];
+    // Navigate with query params
+    const url = new URL(window.location);
+    url.searchParams.set('range', state.range);
+    url.searchParams.set('index', state.index);
+    window.location.href = url.toString();
+  });
+
+  // Tab switching
+  document.querySelector('.tab-bar')?.addEventListener('click', (e) => {
+    const btn = e.target.closest('.tab-btn');
+    if (!btn) return;
+    const range = btn.dataset.range;
+    if (range === state.range) return;
+    state.range = range;
+    state.index = 0;
+    const url = new URL(window.location);
+    url.searchParams.set('range', state.range);
+    url.searchParams.set('index', '0');
+    window.location.href = url.toString();
+  });
+</script>
+
+<style>
+  .main-layout {
+    display: grid;
+    grid-template-columns: 1fr 3fr 1.5fr;
+    gap: 16px;
+    padding-top: 16px;
+    padding-bottom: 16px;
+    min-height: calc(100vh - 140px);
+  }
+  .panel {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+  }
+  .status-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    font-size: 12px;
+  }
+  .update-info { color: var(--text-secondary); }
+  .stale-warning { color: #f59e0b; font-weight: 600; }
+  @media (max-width: 768px) {
+    .main-layout { grid-template-columns: 1fr; }
+    .right-panel { display: none; }
+  }
+</style>

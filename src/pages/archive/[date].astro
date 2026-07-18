@@ -1,0 +1,86 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import RankList from '../../components/RankList.astro';
+import ProjectDetail from '../../components/ProjectDetail.astro';
+import SidePanel from '../../components/SidePanel.astro';
+import Footer from '../../components/Footer.astro';
+import { readFileSync, existsSync } from 'fs';
+import { join } from 'path';
+
+export async function getStaticPaths() {
+  const dataPath = join(process.cwd(), 'data', 'data.json');
+  const allData = existsSync(dataPath) ? JSON.parse(readFileSync(dataPath, 'utf-8')) : {};
+  return Object.keys(allData).map(date => ({
+    params: { date },
+    props: { date },
+  }));
+}
+
+const { date } = Astro.params;
+const dataPath = join(process.cwd(), 'data', 'data.json');
+const allData = existsSync(dataPath) ? JSON.parse(readFileSync(dataPath, 'utf-8')) : {};
+const dayData = allData[date];
+const daily = dayData?.ranges?.daily || [];
+const weekly = dayData?.ranges?.weekly || [];
+const monthly = dayData?.ranges?.monthly || [];
+const hasData = daily.length > 0;
+---
+
+<BaseLayout title={`${date} 榜单`}>
+  <Header />
+  <main class="container main-layout">
+    {hasData ? (
+      <>
+        <div class="panel left-panel">
+          <RankList {daily} {weekly} {monthly} activeRange="daily" selectedIndex={0} />
+        </div>
+        <div class="panel center-panel">
+          <ProjectDetail project={daily[0] || null} />
+        </div>
+        <div class="panel right-panel">
+          <SidePanel project={daily[0] || null} />
+        </div>
+      </>
+    ) : (
+      <div class="no-data">
+        <p>暂无 {date} 的数据</p>
+        <a href="/github-daily-trending/archive" class="back-link">← 返回归档</a>
+      </div>
+    )}
+  </main>
+  <Footer />
+</BaseLayout>
+
+<style>
+  .main-layout {
+    display: grid;
+    grid-template-columns: 1fr 3fr 1.5fr;
+    gap: 16px;
+    padding-top: 16px;
+    padding-bottom: 16px;
+    min-height: calc(100vh - 120px);
+  }
+  .panel {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+  }
+  .no-data {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 80px 0;
+    color: var(--text-secondary);
+  }
+  .back-link {
+    display: inline-block;
+    margin-top: 12px;
+    color: var(--accent);
+    text-decoration: none;
+  }
+  @media (max-width: 768px) {
+    .main-layout { grid-template-columns: 1fr; }
+    .right-panel { display: none; }
+  }
+</style>
