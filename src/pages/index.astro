@@ -14,108 +14,115 @@ const daily = todayData?.ranges?.daily || [];
 const lastUpdated = todayData?.generatedAt || '';
 const p0 = todayData?.ranges?.daily?.[0] || null;
 const a0 = p0?.analysis;
+const labels = { daily: '日榜', weekly: '周榜', monthly: '月榜' };
 ---
 
-<BaseLayout title="今日榜单" date={latestDate}>
+<BaseLayout title="排行榜" date={latestDate}>
   <Header />
-  <main class="container main-layout">
-    <aside class="left-panel">
-      <div class="rank-list" id="rank-list-root">
-        <div class="tab-bar">
-          <span class="top-label">TOP 10 日榜</span>
-          <div class="tab-group">
-            <button class="tab-btn active" data-range="daily">每日</button>
-            <button class="tab-btn" data-range="weekly">每周</button>
-            <button class="tab-btn" data-range="monthly">每月</button>
+  <main class="container">
+    <div class="page-header">
+      <h1 class="page-title">GitHub Trending</h1>
+      <p class="page-subtitle">{labels.daily}</p>
+    </div>
+    <div class="main-layout">
+      <aside class="left-panel">
+        <div class="rank-list" id="rank-list-root">
+          <div class="tab-bar">
+            <span class="top-label">TOP 10 日榜</span>
+            <div class="tab-group">
+              <button class="tab-btn active" data-range="daily">每日</button>
+              <button class="tab-btn" data-range="weekly">每周</button>
+              <button class="tab-btn" data-range="monthly">每月</button>
+            </div>
           </div>
+          <ul class="items" id="rank-items">
+            {daily.slice(0, 10).map((item, i) => (
+              <li class="rank-item" class:list={{ active: i === 0 }}>
+                <span class="rank-num">{String(item.rank).padStart(2, '0')}</span>
+                <div class="rank-info">
+                  <span class="rank-name">{item.name}</span>
+                  <div class="rank-meta">
+                    <span>{item.stars.toLocaleString()} stars</span>
+                    {item.language && <span class="lang-tag">{item.language}</span>}
+                    {item.weeklyAppearances > 1 && <span class="week-tag">周{item.weeklyAppearances}次</span>}
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
         </div>
-        <ul class="items" id="rank-items">
-          {daily.slice(0, 10).map((item, i) => (
-            <li class="rank-item" class:list={{ active: i === 0 }}>
-              <span class="rank-num">{String(item.rank).padStart(2, '0')}</span>
-              <div class="rank-info">
-                <span class="rank-name">{item.name}</span>
-                <div class="rank-meta">
-                  <span>{item.stars.toLocaleString()} stars</span>
-                  {item.language && <span class="lang-tag">{item.language}</span>}
-                  {item.weeklyAppearances > 1 && <span class="week-tag">周{item.weeklyAppearances}次</span>}
+      </aside>
+      <section class="center-panel" id="detail-panel">
+        {p0 && a0 ? (
+          <div class="project-detail">
+            <div class="detail-header">
+              <div class="detail-rank-badge">{String(p0.rank).padStart(2, '0')}</div>
+              <h2 class="project-name">{p0.fullName}</h2>
+              <p class="project-desc">{p0.description}</p>
+              <div class="project-tags">
+                {p0.language && <span class="tag lang">{p0.language}</span>}
+                {p0.weeklyAppearances > 1 && <span class="tag weekly">本周上日榜 {p0.weeklyAppearances} 次</span>}
+                <span class="tag stars">{p0.stars.toLocaleString()} stars</span>
+                <span class="tag today">+{p0.starsRange.toLocaleString()} today</span>
+              </div>
+            </div>
+            <div class="analysis-section">
+              <div class="analysis-cards">
+                <div class="analysis-card"><div class="card-header"><span class="card-num">1</span><h3 class="card-title">Core Idea</h3></div><p class="card-content">{a0.coreIdea}</p></div>
+                <div class="analysis-card"><div class="card-header"><span class="card-num">2</span><h3 class="card-title">Engineering Method</h3></div><p class="card-content">{a0.engineeringMethod}</p></div>
+                <div class="analysis-card highlight"><div class="card-header"><span class="card-num">3</span><h3 class="card-title">Why It Matters</h3></div><p class="card-content">{a0.whyItMatters}</p></div>
+              </div>
+              <div class="info-grid">
+                <div class="info-section"><h3 class="info-label">Audience</h3>
+                  <div class="meta-row"><span class="meta-key">适合人群</span><span class="meta-val">{a0.audience}</span></div>
+                  <div class="meta-row"><span class="meta-key">难度</span><span class="meta-val diff">{a0.difficulty}</span></div>
+                </div>
+                <div class="info-section"><h3 class="info-label">Quick Start</h3>
+                  <div class="meta-row"><span class="meta-key">快速开始</span><span class="meta-val">{a0.quickStart}</span></div>
                 </div>
               </div>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </aside>
-    <section class="center-panel" id="detail-panel">
-      {p0 && a0 ? (
-        <div class="project-detail">
-          <div class="detail-header">
-            <div class="detail-rank-badge">{String(p0.rank).padStart(2, '0')}</div>
-            <h2 class="project-name">{p0.fullName}</h2>
-            <p class="project-desc">{p0.description}</p>
-            <div class="project-tags">
-              {p0.language && <span class="tag lang">{p0.language}</span>}
-              {p0.weeklyAppearances > 1 && <span class="tag weekly">本周上日榜 {p0.weeklyAppearances} 次</span>}
-              <span class="tag stars">{p0.stars.toLocaleString()} stars</span>
-              <span class="tag today">+{p0.starsRange.toLocaleString()} today</span>
-            </div>
-          </div>
-          <div class="analysis-section">
-            <div class="analysis-cards">
-              <div class="analysis-card"><div class="card-header"><span class="card-num">1</span><h3 class="card-title">Core Idea</h3></div><p class="card-content">{a0.coreIdea}</p></div>
-              <div class="analysis-card"><div class="card-header"><span class="card-num">2</span><h3 class="card-title">Engineering Method</h3></div><p class="card-content">{a0.engineeringMethod}</p></div>
-              <div class="analysis-card highlight"><div class="card-header"><span class="card-num">3</span><h3 class="card-title">Why It Matters</h3></div><p class="card-content">{a0.whyItMatters}</p></div>
-            </div>
-            <div class="info-grid">
-              <div class="info-section"><h3 class="info-label">Audience</h3>
-                <div class="meta-row"><span class="meta-key">适合人群</span><span class="meta-val">{a0.audience}</span></div>
-                <div class="meta-row"><span class="meta-key">难度</span><span class="meta-val diff">{a0.difficulty}</span></div>
-              </div>
-              <div class="info-section"><h3 class="info-label">Quick Start</h3>
-                <div class="meta-row"><span class="meta-key">快速开始</span><span class="meta-val">{a0.quickStart}</span></div>
+              {a0.whyItIsHot && <div class="hot-section"><h3 class="info-label">Why It Is Hot</h3><p>{a0.whyItIsHot}</p></div>}
+              {a0.useCase && <div class="hot-section"><h3 class="info-label">Use Case</h3><p>{a0.useCase}</p></div>}
+              <div class="repo-info">
+                <span>{p0.stars.toLocaleString()} stars</span><span class="repo-stat sep">·</span>
+                <span>+{p0.starsRange.toLocaleString()} today</span><span class="repo-stat sep">·</span>
+                <span>{(p0.forks || '-').toLocaleString()} forks</span><span class="repo-stat sep">·</span>
+                <span>{p0.language || 'N/A'}</span>
+                <a href={`https://github.com/${p0.fullName}`} target="_blank" class="gh-link">View on GitHub →</a>
               </div>
             </div>
-            {a0.whyItIsHot && <div class="hot-section"><h3 class="info-label">Why It Is Hot</h3><p>{a0.whyItIsHot}</p></div>}
-            {a0.useCase && <div class="hot-section"><h3 class="info-label">Use Case</h3><p>{a0.useCase}</p></div>}
-            <div class="repo-info">
-              <span>{p0.stars.toLocaleString()} stars</span><span class="repo-stat sep">·</span>
-              <span>+{p0.starsRange.toLocaleString()} today</span><span class="repo-stat sep">·</span>
-              <span>{(p0.forks || '-').toLocaleString()} forks</span><span class="repo-stat sep">·</span>
-              <span>{p0.language || 'N/A'}</span>
-              <a href={`https://github.com/${p0.fullName}`} target="_blank" class="gh-link">View on GitHub →</a>
-            </div>
           </div>
-        </div>
-      ) : (
-        <div style="display:flex;align-items:center;justify-content:center;color:var(--text-tertiary);height:100%;font-size:14px">选择项目查看详情</div>
-      )}
-    </section>
-    <aside class="right-panel" id="side-panel">
-      {p0 ? (
-        <div class="side-panel">
-          <div class="panel-section"><h3 class="panel-title">仓库信息</h3>
-            <div class="info-list">
-              <div class="info-item"><span class="info-key">Stars</span><span class="info-val green">{p0.stars.toLocaleString()}</span></div>
-              <div class="info-item"><span class="info-key">Today</span><span class="info-val red">+{p0.starsRange.toLocaleString()}</span></div>
-              <div class="info-item"><span class="info-key">Forks</span><span class="info-val">{(p0.forks || '-').toLocaleString()}</span></div>
-              <div class="info-item"><span class="info-key">Language</span><span class="info-val">{p0.language || 'N/A'}</span></div>
+        ) : (
+          <div class="empty-state">选择项目查看详情</div>
+        )}
+      </section>
+      <aside class="right-panel" id="side-panel">
+        {p0 ? (
+          <div class="side-panel">
+            <div class="panel-section"><h3 class="panel-title">仓库信息</h3>
+              <div class="info-list">
+                <div class="info-item"><span class="info-key">Stars</span><span class="info-val green">{p0.stars.toLocaleString()}</span></div>
+                <div class="info-item"><span class="info-key">Today</span><span class="info-val red">+{p0.starsRange.toLocaleString()}</span></div>
+                <div class="info-item"><span class="info-key">Forks</span><span class="info-val">{(p0.forks || '-').toLocaleString()}</span></div>
+                <div class="info-item"><span class="info-key">Language</span><span class="info-val">{p0.language || 'N/A'}</span></div>
+              </div>
             </div>
+            <a href={`https://github.com/${p0.fullName}`} target="_blank" class="gh-btn">View on GitHub</a>
           </div>
-          <a href={`https://github.com/${p0.fullName}`} target="_blank" class="gh-btn">View on GitHub</a>
-        </div>
-      ) : (
-        <div style="padding:40px 0;text-align:center;color:var(--text-tertiary);font-size:13px">选择项目以查看详情</div>
-      )}
-    </aside>
-  </main>
-  {lastUpdated && (
-    <div class="status-bar container">
-      <span class="update-info">上次更新 {new Date(lastUpdated).toLocaleString('zh-CN')}</span>
-      {Date.now() - new Date(lastUpdated).getTime() > 26 * 3600000 && (
-        <span class="stale-warning">数据已超过 24 小时未更新</span>
-      )}
+        ) : (
+          <div class="empty-state" style="padding:32px 0">选择项目以查看详情</div>
+        )}
+      </aside>
     </div>
-  )}
+    {lastUpdated && (
+      <div class="status-bar">
+        <span>上次更新 {new Date(lastUpdated).toLocaleString('zh-CN')}</span>
+        {Date.now() - new Date(lastUpdated).getTime() > 26 * 3600000 && (
+          <span class="stale-warning">数据已超过 24 小时未更新</span>
+        )}
+      </div>
+    )}
+  </main>
   <Footer />
 </BaseLayout>
 
@@ -138,7 +145,7 @@ const a0 = p0?.analysis;
   function pad(n) { return String(n).padStart(2, '0'); }
 
   function renderProjectDetail(p) {
-    if (!p) return '<div style="display:flex;align-items:center;justify-content:center;color:var(--text-tertiary);height:100%;font-size:14px">选择项目查看详情</div>';
+    if (!p) return '<div class="empty-state">选择项目查看详情</div>';
     const a = p.analysis;
     const analysisCards = a ? html`
     <div class="analysis-cards">
@@ -185,7 +192,7 @@ const a0 = p0?.analysis;
   }
 
   function renderSidePanel(p) {
-    if (!p) return '<div style="padding:40px 0;text-align:center;color:var(--text-tertiary);font-size:13px">选择项目以查看详情</div>';
+    if (!p) return '<div class="empty-state" style="padding:32px 0">选择项目以查看详情</div>';
     return html`
 <div class="side-panel">
   <div class="panel-section"><h3 class="panel-title">仓库信息</h3>
@@ -250,6 +257,7 @@ const a0 = p0?.analysis;
     itemsContainer.innerHTML = renderRankItems(items, state.index);
     detailPanel.innerHTML = renderProjectDetail(project);
     sidePanel.innerHTML = renderSidePanel(project);
+    document.querySelector('.page-subtitle').textContent = labels[state.range];
   }
 
   rankListRoot.addEventListener('click', (e) => {
