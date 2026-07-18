@@ -16,7 +16,7 @@ if (!GEMINI_API_KEY) {
 }
 
 const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
+const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash-lite' });
 
 function parseTrendingPage(html) {
   const $ = cheerio.load(html);
@@ -139,6 +139,10 @@ async function main() {
   const today = new Date().toISOString().slice(0, 10);
   const appearances = await computeWeeklyAppearances(daily, existingData);
 
+  function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
   const itemsWithAnalysis = [];
   for (const item of daily.slice(0, 10)) {
     console.log(`Processing ${item.fullName}...`);
@@ -146,13 +150,29 @@ async function main() {
     try {
       const readme = await fetchReadme(item.fullName);
       if (readme) {
-        analysis = await generateAnalysis(
-          item.fullName, item.description, item.stars, item.language, readme
-        );
+        // Retry up to 3 times with exponential backoff for rate limits
+        for (let attempt = 0; attempt < 3; attempt++) {
+          try {
+            analysis = await generateAnalysis(
+              item.fullName, item.description, item.stars, item.language, readme
+            );
+            break;
+          } catch (err) {
+            if (err.message.includes('429') && attempt < 2) {
+              const wait = 15000 * Math.pow(2, attempt);
+              console.log(`Rate limited, retrying in ${wait}ms...`);
+              await sleep(wait);
+            } else {
+              throw err;
+            }
+          }
+        }
       }
     } catch (err) {
       console.warn(`Failed analysis for ${item.fullName}: ${err.message}`);
     }
+    // Wait 12s between projects to stay under free tier rate limits
+    await sleep(12000);
     itemsWithAnalysis.push({
       ...item,
       starsRange: item.starsToday,
