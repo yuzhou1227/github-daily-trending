@@ -1,9 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
-import RankList from '../components/RankList.astro';
-import ProjectDetail from '../components/ProjectDetail.astro';
-import SidePanel from '../components/SidePanel.astro';
 import Footer from '../components/Footer.astro';
 import { readFileSync, existsSync } from 'fs';
 import { join } from 'path';
@@ -14,30 +11,101 @@ const dates = Object.keys(allData).sort().reverse();
 const latestDate = dates[0] || '';
 const todayData = latestDate ? allData[latestDate] : null;
 const daily = todayData?.ranges?.daily || [];
-const weekly = todayData?.ranges?.weekly || [];
-const monthly = todayData?.ranges?.monthly || [];
 const lastUpdated = todayData?.generatedAt || '';
-
-const url = new URL(Astro.request.url);
-const rangeParam = url.searchParams.get('range') || 'daily';
-const indexParam = parseInt(url.searchParams.get('index')) || 0;
-const activeRange = ['daily', 'weekly', 'monthly'].includes(rangeParam) ? rangeParam : 'daily';
-const currentItems = activeRange === 'daily' ? daily : activeRange === 'weekly' ? weekly : monthly;
-const selectedIndex = indexParam >= 0 && indexParam < currentItems.length ? indexParam : 0;
-const activeProject = currentItems[selectedIndex] || null;
+const p = todayData?.ranges?.daily?.[0] || null;
+const a = p?.analysis;
 ---
 
 <BaseLayout title="今日榜单" date={latestDate}>
   <Header />
   <main class="container main-layout">
     <aside class="left-panel">
-      <RankList {daily} {weekly} {monthly} {activeRange} {selectedIndex} />
+      <div class="rank-list" id="rank-list-root">
+        <div class="tab-bar">
+          <span class="top-label">TOP 10 日榜</span>
+          <div class="tab-group">
+            <button class="tab-btn active" data-range="daily">每日</button>
+            <button class="tab-btn" data-range="weekly">每周</button>
+            <button class="tab-btn" data-range="monthly">每月</button>
+          </div>
+        </div>
+        <ul class="items" id="rank-items">
+          {daily.slice(0, 10).map((item, i) => (
+            <li class="rank-item" class:list={{ active: i === 0 }}>
+              <span class="rank-num">#{item.rank}</span>
+              <div class="rank-info">
+                <span class="rank-name">{item.name}</span>
+                <div class="rank-meta">
+                  <span class="stars">{item.stars.toLocaleString()} stars</span>
+                  {item.language && <span class="lang-tag">{item.language}</span>}
+                  {item.weeklyAppearances > 1 && <span class="week-tag">周{item.weeklyAppearances}次</span>}
+                </div>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
     </aside>
     <section class="center-panel" id="detail-panel">
-      <ProjectDetail project={activeProject} />
+      {p && a ? (
+        <div class="project-detail">
+          <div class="detail-header">
+            <div class="detail-rank-badge">#{p.rank}</div>
+            <h2 class="project-name">{p.fullName}</h2>
+            <p class="project-desc">{p.description}</p>
+            <div class="project-tags">
+              {p.language && <span class="tag lang">{p.language}</span>}
+              {p.weeklyAppearances > 1 && <span class="tag weekly">本周上日榜 {p.weeklyAppearances} 次</span>}
+              <span class="tag stars">★ {p.stars.toLocaleString()} stars</span>
+              <span class="tag today">▲ +{p.starsRange.toLocaleString()} today</span>
+            </div>
+          </div>
+          <div class="analysis-section">
+            <div class="analysis-cards">
+              <div class="analysis-card"><div class="card-header"><span class="card-num">1</span><h3 class="card-title">CORE IDEA</h3></div><p class="card-content">{a.coreIdea}</p></div>
+              <div class="analysis-card"><div class="card-header"><span class="card-num">2</span><h3 class="card-title">ENGINEERING METHOD</h3></div><p class="card-content">{a.engineeringMethod}</p></div>
+              <div class="analysis-card highlight"><div class="card-header"><span class="card-num">3</span><h3 class="card-title">WHY IT MATTERS</h3></div><p class="card-content">{a.whyItMatters}</p></div>
+            </div>
+            <div class="info-grid">
+              <div class="info-section"><h3 class="info-label">谁最该看</h3>
+                <div class="meta-row"><span class="meta-key">AUDIENCE</span><span class="meta-val">{a.audience}</span></div>
+                <div class="meta-row"><span class="meta-key">DIFFICULTY</span><span class="meta-val diff">{a.difficulty}</span></div>
+              </div>
+              <div class="info-section"><h3 class="info-label">实用信息</h3>
+                <div class="meta-row"><span class="meta-key">QUICK START</span><span class="meta-val">{a.quickStart}</span></div>
+              </div>
+            </div>
+            {a.whyItIsHot && <div class="hot-section"><h3 class="info-label">WHY IT IS HOT</h3><p>{a.whyItIsHot}</p></div>}
+            {a.useCase && <div class="hot-section"><h3 class="info-label">USE CASE</h3><p>{a.useCase}</p></div>}
+            <div class="repo-info">
+              <span class="repo-stat">★ {p.stars.toLocaleString()}</span><span class="repo-stat sep">|</span>
+              <span class="repo-stat">▲ +{p.starsRange.toLocaleString()}</span><span class="repo-stat sep">|</span>
+              <span class="repo-stat">⑂ {(p.forks || '-').toLocaleString()}</span><span class="repo-stat sep">|</span>
+              <span class="repo-stat">{p.language || 'N/A'}</span>
+              <a href={`https://github.com/${p.fullName}`} target="_blank" class="gh-link">在 GitHub 上查看 →</a>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div style="display:flex;align-items:center;justify-content:center;color:var(--text-secondary);height:100%">选择项目查看详情</div>
+      )}
     </section>
     <aside class="right-panel" id="side-panel">
-      <SidePanel project={activeProject} />
+      {p ? (
+        <div class="side-panel">
+          <div class="panel-section"><h3 class="panel-title">仓库信息</h3>
+            <div class="info-list">
+              <div class="info-item"><span class="info-key">★ Stars</span><span class="info-val green">{p.stars.toLocaleString()}</span></div>
+              <div class="info-item"><span class="info-key">▲ 今日涨星</span><span class="info-val red">+{p.starsRange.toLocaleString()}</span></div>
+              <div class="info-item"><span class="info-key">⑂ Forks</span><span class="info-val">{(p.forks || '-').toLocaleString()}</span></div>
+              <div class="info-item"><span class="info-key">🔤 语言</span><span class="info-val">{p.language || 'N/A'}</span></div>
+            </div>
+          </div>
+          <a href={`https://github.com/${p.fullName}`} target="_blank" class="gh-btn">在 GitHub 上查看 →</a>
+        </div>
+      ) : (
+        <div style="padding:40px 0;text-align:center;color:var(--text-secondary);font-size:14px">选择项目以查看详情</div>
+      )}
     </aside>
   </main>
   {lastUpdated && (
@@ -55,79 +123,173 @@ const activeProject = currentItems[selectedIndex] || null;
   const data = allData[latestDate];
   if (!data) throw new Error('no data');
 
+  function html(t, ...v) {
+    let r = t[0];
+    for (let i = 0; i < v.length; i++) r += String(v[i]) + t[i + 1];
+    return r;
+  }
+
+  function esc(s) {
+    const d = document.createElement('div');
+    d.textContent = s;
+    return d.innerHTML;
+  }
+
+  function renderProjectDetail(p) {
+    if (!p) return '<div style="display:flex;align-items:center;justify-content:center;color:var(--text-secondary);height:100%">选择项目查看详情</div>';
+    const a = p.analysis;
+    if (!a) return '<div style="padding:40px;text-align:center;color:var(--text-secondary)">分析生成中</div>';
+    return html`
+<div class="project-detail">
+  <div class="detail-header">
+    <div class="detail-rank-badge">#${p.rank}</div>
+    <h2 class="project-name">${esc(p.fullName)}</h2>
+    <p class="project-desc">${esc(p.description)}</p>
+    <div class="project-tags">
+      ${p.language ? `<span class="tag lang">${esc(p.language)}</span>` : ''}
+      ${p.weeklyAppearances > 1 ? `<span class="tag weekly">本周上日榜 ${p.weeklyAppearances} 次</span>` : ''}
+      <span class="tag stars">★ ${p.stars.toLocaleString()} stars</span>
+      <span class="tag today">▲ +${p.starsRange.toLocaleString()} today</span>
+    </div>
+  </div>
+  <div class="analysis-section">
+    <div class="analysis-cards">
+      <div class="analysis-card"><div class="card-header"><span class="card-num">1</span><h3 class="card-title">CORE IDEA</h3></div><p class="card-content">${esc(a.coreIdea)}</p></div>
+      <div class="analysis-card"><div class="card-header"><span class="card-num">2</span><h3 class="card-title">ENGINEERING METHOD</h3></div><p class="card-content">${esc(a.engineeringMethod)}</p></div>
+      <div class="analysis-card highlight"><div class="card-header"><span class="card-num">3</span><h3 class="card-title">WHY IT MATTERS</h3></div><p class="card-content">${esc(a.whyItMatters)}</p></div>
+    </div>
+    <div class="info-grid">
+      <div class="info-section"><h3 class="info-label">谁最该看</h3>
+        <div class="meta-row"><span class="meta-key">AUDIENCE</span><span class="meta-val">${esc(a.audience)}</span></div>
+        <div class="meta-row"><span class="meta-key">DIFFICULTY</span><span class="meta-val diff">${esc(a.difficulty)}</span></div>
+      </div>
+      <div class="info-section"><h3 class="info-label">实用信息</h3>
+        <div class="meta-row"><span class="meta-key">QUICK START</span><span class="meta-val">${esc(a.quickStart)}</span></div>
+      </div>
+    </div>
+    ${a.whyItIsHot ? `<div class="hot-section"><h3 class="info-label">WHY IT IS HOT</h3><p>${esc(a.whyItIsHot)}</p></div>` : ''}
+    ${a.useCase ? `<div class="hot-section"><h3 class="info-label">USE CASE</h3><p>${esc(a.useCase)}</p></div>` : ''}
+    <div class="repo-info">
+      <span class="repo-stat">★ ${p.stars.toLocaleString()}</span><span class="repo-stat sep">|</span>
+      <span class="repo-stat">▲ +${p.starsRange.toLocaleString()}</span><span class="repo-stat sep">|</span>
+      <span class="repo-stat">⑂ ${(p.forks || '-').toLocaleString()}</span><span class="repo-stat sep">|</span>
+      <span class="repo-stat">${esc(p.language || 'N/A')}</span>
+      <a href="https://github.com/${esc(p.fullName)}" target="_blank" class="gh-link">在 GitHub 上查看 →</a>
+    </div>
+  </div>
+</div>`;
+  }
+
+  function renderSidePanel(p) {
+    if (!p) return '<div style="padding:40px 0;text-align:center;color:var(--text-secondary);font-size:14px">选择项目以查看详情</div>';
+    return html`
+<div class="side-panel">
+  <div class="panel-section"><h3 class="panel-title">仓库信息</h3>
+    <div class="info-list">
+      <div class="info-item"><span class="info-key">★ Stars</span><span class="info-val green">${p.stars.toLocaleString()}</span></div>
+      <div class="info-item"><span class="info-key">▲ 今日涨星</span><span class="info-val red">+${p.starsRange.toLocaleString()}</span></div>
+      <div class="info-item"><span class="info-key">⑂ Forks</span><span class="info-val">${(p.forks || '-').toLocaleString()}</span></div>
+      <div class="info-item"><span class="info-key">🔤 语言</span><span class="info-val">${esc(p.language || 'N/A')}</span></div>
+    </div>
+  </div>
+  <a href="https://github.com/${esc(p.fullName)}" target="_blank" class="gh-btn">在 GitHub 上查看 →</a>
+</div>`;
+  }
+
+  function renderRankItems(items, activeIndex) {
+    return items.slice(0, 10).map((item, i) => html`
+<li class="rank-item${i === activeIndex ? ' active' : ''}" data-index="${i}">
+  <span class="rank-num">#${item.rank}</span>
+  <div class="rank-info">
+    <span class="rank-name">${esc(item.name)}</span>
+    <div class="rank-meta">
+      <span class="stars">${item.stars.toLocaleString()} stars</span>
+      ${item.language ? `<span class="lang-tag">${esc(item.language)}</span>` : ''}
+      ${item.weeklyAppearances > 1 ? `<span class="week-tag">周${item.weeklyAppearances}次</span>` : ''}
+    </div>
+  </div>
+</li>`).join('');
+  }
+
   const detailPanel = document.getElementById('detail-panel');
   const sidePanel = document.getElementById('side-panel');
   const itemsContainer = document.getElementById('rank-items');
+  const rankListRoot = document.getElementById('rank-list-root');
 
-  let state = (() => {
+  function getState() {
     const p = new URLSearchParams(window.location.search);
     const range = p.get('range') || 'daily';
-    const index = parseInt(p.get('index')) || 0;
+    const idx = parseInt(p.get('index')) || 0;
     const items = data.ranges[range] || [];
     return {
       range: ['daily', 'weekly', 'monthly'].includes(range) ? range : 'daily',
-      index: index >= 0 && index < items.length ? index : 0,
+      index: idx >= 0 && idx < items.length ? idx : 0,
     };
-  })();
-
-  function getItems() {
-    return data.ranges[state.range] || [];
   }
 
-  function render(project) {
-    if (!project) {
-      detailPanel.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;color:var(--text-secondary);height:100%">选择项目查看详情</div>';
-      sidePanel.innerHTML = '<div style="padding:40px 0;text-align:center;color:var(--text-secondary);font-size:14px">选择项目以查看详情</div>';
-      return;
-    }
-    // Full page load to render server-side
+  function setState(range, index) {
     const url = new URL(window.location);
-    url.searchParams.set('range', state.range);
-    url.searchParams.set('index', state.index);
-    window.location.href = url.toString();
+    url.searchParams.set('range', range);
+    url.searchParams.set('index', index);
+    window.history.pushState({ range, index }, '', url.toString());
   }
 
-  function updateURL() {
-    const url = new URL(window.location);
-    url.searchParams.set('range', state.range);
-    url.searchParams.set('index', state.index);
-    window.history.replaceState({ range: state.range, index: state.index }, '', url.toString());
-  }
+  function render(state) {
+    const items = data.ranges[state.range] || [];
+    const project = items[state.index] || null;
 
-  function updateActiveClass() {
-    itemsContainer?.querySelectorAll('.rank-item').forEach((el, i) => {
-      el.classList.toggle('active', i === state.index);
-    });
     // Update tab buttons
-    document.querySelectorAll('.tab-btn').forEach(btn => {
+    rankListRoot.querySelectorAll('.tab-btn').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.range === state.range);
     });
+
+    // Update label
+    const labels = { daily: '日榜', weekly: '周榜', monthly: '月榜' };
+    rankListRoot.querySelector('.top-label').textContent = `TOP 10 ${labels[state.range]}`;
+
+    // Re-render rank items
+    itemsContainer.innerHTML = renderRankItems(items, state.index);
+
+    // Re-render panels
+    detailPanel.innerHTML = renderProjectDetail(project);
+    sidePanel.innerHTML = renderSidePanel(project);
   }
 
-  itemsContainer?.addEventListener('click', (e) => {
+  // Click delegation on rank list root
+  rankListRoot.addEventListener('click', (e) => {
     const item = e.target.closest('.rank-item');
-    if (!item) return;
-    const allItems = Array.from(itemsContainer.querySelectorAll('.rank-item'));
-    const newIndex = allItems.indexOf(item);
-    if (newIndex === -1 || newIndex === state.index) return;
-    state.index = newIndex;
-    updateURL();
-    render(getItems()[newIndex]);
-  });
+    if (item) {
+      const idx = parseInt(item.dataset.index);
+      if (isNaN(idx)) return;
+      const st = getState();
+      if (idx === st.index) return;
+      setState(st.range, idx);
+      render(getState());
+      return;
+    }
 
-  document.querySelector('.tab-group')?.addEventListener('click', (e) => {
     const btn = e.target.closest('.tab-btn');
-    if (!btn) return;
-    const range = btn.dataset.range;
-    if (range === state.range) return;
-    state.range = range;
-    state.index = 0;
-    updateURL();
-    render(getItems()[0]);
+    if (btn) {
+      const range = btn.dataset.range;
+      const st = getState();
+      if (range === st.range) return;
+      setState(range, 0);
+      render(getState());
+      return;
+    }
   });
 
-  // Highlight active items on load
-  updateActiveClass();
+  // Handle back/forward
+  window.addEventListener('popstate', () => {
+    render(getState());
+  });
+
+  // Initial render from URL params
+  const initial = getState();
+  render(initial);
+  if (initial.range !== 'daily' || initial.index !== 0) {
+    setState(initial.range, initial.index);
+  }
 </script>
 
 <style>
@@ -148,9 +310,7 @@ const activeProject = currentItems[selectedIndex] || null;
     position: sticky;
     top: 20px;
   }
-  .center-panel {
-    min-height: 400px;
-  }
+  .center-panel { min-height: 400px; }
   .right-panel {
     background: var(--bg-card);
     border: 1px solid var(--border);
@@ -175,7 +335,6 @@ const activeProject = currentItems[selectedIndex] || null;
   }
   @media (max-width: 768px) {
     .main-layout { grid-template-columns: 1fr; }
-    .right-panel { display: none; }
-    .left-panel { position: static; }
+    .right-panel, .left-panel { display: none; }
   }
 </style>
