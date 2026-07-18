@@ -138,21 +138,7 @@ const a = p?.analysis;
   function renderProjectDetail(p) {
     if (!p) return '<div style="display:flex;align-items:center;justify-content:center;color:var(--text-secondary);height:100%">选择项目查看详情</div>';
     const a = p.analysis;
-    if (!a) return '<div style="padding:40px;text-align:center;color:var(--text-secondary)">分析生成中</div>';
-    return html`
-<div class="project-detail">
-  <div class="detail-header">
-    <div class="detail-rank-badge">#${p.rank}</div>
-    <h2 class="project-name">${esc(p.fullName)}</h2>
-    <p class="project-desc">${esc(p.description)}</p>
-    <div class="project-tags">
-      ${p.language ? `<span class="tag lang">${esc(p.language)}</span>` : ''}
-      ${p.weeklyAppearances > 1 ? `<span class="tag weekly">本周上日榜 ${p.weeklyAppearances} 次</span>` : ''}
-      <span class="tag stars">★ ${p.stars.toLocaleString()} stars</span>
-      <span class="tag today">▲ +${p.starsRange.toLocaleString()} today</span>
-    </div>
-  </div>
-  <div class="analysis-section">
+    const analysisCards = a ? html`
     <div class="analysis-cards">
       <div class="analysis-card"><div class="card-header"><span class="card-num">1</span><h3 class="card-title">CORE IDEA</h3></div><p class="card-content">${esc(a.coreIdea)}</p></div>
       <div class="analysis-card"><div class="card-header"><span class="card-num">2</span><h3 class="card-title">ENGINEERING METHOD</h3></div><p class="card-content">${esc(a.engineeringMethod)}</p></div>
@@ -168,7 +154,23 @@ const a = p?.analysis;
       </div>
     </div>
     ${a.whyItIsHot ? `<div class="hot-section"><h3 class="info-label">WHY IT IS HOT</h3><p>${esc(a.whyItIsHot)}</p></div>` : ''}
-    ${a.useCase ? `<div class="hot-section"><h3 class="info-label">USE CASE</h3><p>${esc(a.useCase)}</p></div>` : ''}
+    ${a.useCase ? `<div class="hot-section"><h3 class="info-label">USE CASE</h3><p>${esc(a.useCase)}</p></div>` : ''}`
+    : '<div style="padding:20px 0;color:var(--text-secondary);font-size:14px">周榜/月榜暂无 AI 分析</div>';
+    return html`
+<div class="project-detail">
+  <div class="detail-header">
+    <div class="detail-rank-badge">#${p.rank}</div>
+    <h2 class="project-name">${esc(p.fullName)}</h2>
+    <p class="project-desc">${esc(p.description)}</p>
+    <div class="project-tags">
+      ${p.language ? `<span class="tag lang">${esc(p.language)}</span>` : ''}
+      ${p.weeklyAppearances > 1 ? `<span class="tag weekly">本周上日榜 ${p.weeklyAppearances} 次</span>` : ''}
+      <span class="tag stars">★ ${p.stars.toLocaleString()} stars</span>
+      <span class="tag today">▲ +${p.starsRange.toLocaleString()} today</span>
+    </div>
+  </div>
+  <div class="analysis-section">
+    ${analysisCards}
     <div class="repo-info">
       <span class="repo-stat">★ ${p.stars.toLocaleString()}</span><span class="repo-stat sep">|</span>
       <span class="repo-stat">▲ +${p.starsRange.toLocaleString()}</span><span class="repo-stat sep">|</span>
