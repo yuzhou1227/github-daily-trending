@@ -2,21 +2,11 @@ import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import * as cheerio from 'cheerio';
-import { GoogleGenerativeAI } from '@google/generative-ai';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DATA_DIR = join(__dirname, '..', 'data');
 const DATA_FILE = join(DATA_DIR, 'data.json');
-const PROMPT_FILE = join(__dirname, 'prompt.txt');
-
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-if (!GEMINI_API_KEY) {
-  console.error('GEMINI_API_KEY environment variable required');
-  process.exit(1);
-}
-
-const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash-lite' });
+const ANALYSIS_FILE = join(__dirname, 'analysis.json');
 
 function parseTrendingPage(html) {
   const $ = cheerio.load(html);
@@ -59,56 +49,6 @@ async function fetchTrending(since) {
   return parseTrendingPage(html);
 }
 
-async function fetchReadme(fullName) {
-  const url = `https://api.github.com/repos/${fullName}/readme`;
-  const res = await fetch(url, {
-    headers: {
-      Accept: 'application/vnd.github.raw+json',
-      'User-Agent': 'github-daily-trending/1.0',
-    },
-  });
-  if (!res.ok) return '';
-  const text = await res.text();
-  return text.slice(0, 8000);
-}
-
-async function generateAnalysis(fullName, description, stars, language, readme) {
-  const promptTemplate = readFileSync(PROMPT_FILE, 'utf-8');
-  const prompt = promptTemplate
-    .replace('{fullName}', fullName)
-    .replace('{description}', description)
-    .replace('{stars}', String(stars))
-    .replace('{language}', language || 'Unknown')
-    .replace('{readme}', readme);
-
-  const result = await model.generateContent(prompt);
-  const text = result.response.text();
-
-  const sections = {};
-  const sectionNames = [
-    'CORE IDEA', 'ENGINEERING METHOD', 'WHY IT MATTERS',
-    'AUDIENCE', 'DIFFICULTY', 'QUICK START', 'WHY IT IS HOT', 'USE CASE',
-  ];
-  const joined = sectionNames.join('|');
-  for (const name of sectionNames) {
-    const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const pattern = new RegExp(`${escaped}:\\s*(.+?)(?=\\n\\s*(?:${joined})\\s*:|$)`, 's');
-    const match = text.match(pattern);
-    sections[name] = match ? match[1].trim() : '';
-  }
-
-  return {
-    coreIdea: sections['CORE IDEA'],
-    engineeringMethod: sections['ENGINEERING METHOD'],
-    whyItMatters: sections['WHY IT MATTERS'],
-    audience: sections['AUDIENCE'],
-    difficulty: sections['DIFFICULTY'],
-    quickStart: sections['QUICK START'],
-    whyItIsHot: sections['WHY IT IS HOT'],
-    useCase: sections['USE CASE'],
-  };
-}
-
 async function computeWeeklyAppearances(dailyItems, existingData) {
   const appearances = {};
   for (const item of dailyItems) {
@@ -121,6 +61,12 @@ async function computeWeeklyAppearances(dailyItems, existingData) {
     appearances[item.fullName] = count + 1;
   }
   return appearances;
+}
+
+function loadPrebuiltAnalysis() {
+  try {
+    return JSON.parse(readFileSync(ANALYSIS_FILE, 'utf-8'));
+  } catch { return {}; }
 }
 
 async function main() {
@@ -138,60 +84,26 @@ async function main() {
 
   const today = new Date().toISOString().slice(0, 10);
   const appearances = await computeWeeklyAppearances(daily, existingData);
+  const prebuilt = loadPrebuiltAnalysis();
 
-  function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
+  const itemsWithAnalysis = daily.slice(0, 10).map(item => ({
+    ...item,
+    starsRange: item.starsToday,
+    analysis: prebuilt[item.fullName] || null,
+    weeklyAppearances: appearances[item.fullName] || 1,
+  }));
 
-  const itemsWithAnalysis = [];
-  for (const item of daily.slice(0, 10)) {
-    console.log(`Processing ${item.fullName}...`);
-    let analysis = null;
-    try {
-      const readme = await fetchReadme(item.fullName);
-      if (readme) {
-        // Retry up to 3 times with exponential backoff for rate limits
-        for (let attempt = 0; attempt < 3; attempt++) {
-          try {
-            analysis = await generateAnalysis(
-              item.fullName, item.description, item.stars, item.language, readme
-            );
-            break;
-          } catch (err) {
-            if (err.message.includes('429') && attempt < 2) {
-              const wait = 15000 * Math.pow(2, attempt);
-              console.log(`Rate limited, retrying in ${wait}ms...`);
-              await sleep(wait);
-            } else {
-              throw err;
-            }
-          }
-        }
-      }
-    } catch (err) {
-      console.warn(`Failed analysis for ${item.fullName}: ${err.message}`);
-    }
-    // Wait 12s between projects to stay under free tier rate limits
-    await sleep(12000);
-    itemsWithAnalysis.push({
-      ...item,
-      starsRange: item.starsToday,
-      analysis,
-      weeklyAppearances: appearances[item.fullName] || 1,
-    });
-  }
-
-  function mapToOutput(items, rangeStars) {
+  function mapToOutput(items) {
     return items.slice(0, 10).map((item, i) => ({
       rank: i + 1,
       name: item.name,
       fullName: item.fullName,
       description: item.description,
-      language: item.language,
+      language: item.language || '',
       stars: item.stars,
-      starsRange: rangeStars === 'starsToday' ? item.starsToday : item.starsToday,
+      starsRange: item.starsToday,
       forks: item.forks,
-      analysis: null,
+      analysis: prebuilt[item.fullName] || null,
       weeklyAppearances: 0,
     }));
   }
@@ -201,8 +113,8 @@ async function main() {
     generatedAt: new Date().toISOString(),
     ranges: {
       daily: itemsWithAnalysis,
-      weekly: mapToOutput(weekly, 'starsToday'),
-      monthly: mapToOutput(monthly, 'starsToday'),
+      weekly: mapToOutput(weekly),
+      monthly: mapToOutput(monthly),
     },
   };
 
