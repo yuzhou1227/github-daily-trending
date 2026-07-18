@@ -4,79 +4,88 @@ export interface Props {
 }
 
 const { project } = Astro.props;
-const analysis = project?.analysis;
 ---
 
 <div class="side-panel">
-  {project && analysis ? (
+  {project ? (
     <>
-      <div class="section">
-        <h3 class="section-title">WHY IT IS HOT</h3>
-        <p class="section-content">{analysis.whyItIsHot}</p>
+      <div class="panel-section">
+        <h3 class="panel-title">仓库信息</h3>
+        <div class="info-list">
+          <div class="info-item">
+            <span class="info-key">★ Stars</span>
+            <span class="info-val green">{project.stars.toLocaleString()}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-key">▲ 今日涨星</span>
+            <span class="info-val red">+{project.starsRange.toLocaleString()}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-key">⑂ Forks</span>
+            <span class="info-val">{project.forks?.toLocaleString() || '-'}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-key">🔤 语言</span>
+            <span class="info-val">{project.language || 'N/A'}</span>
+          </div>
+        </div>
       </div>
-      <div class="section">
-        <h3 class="section-title">USE CASE</h3>
-        <p class="section-content">{analysis.useCase}</p>
-      </div>
-      <div class="section">
-        <h3 class="section-title">仓库信息</h3>
-        <div class="info-row"><span>⭐ Stars</span><span>{project.stars.toLocaleString()}</span></div>
-        <div class="info-row"><span>▲ 今日涨星</span><span>{project.starsRange.toLocaleString()}</span></div>
-        <div class="info-row"><span>🍴 Forks</span><span>{project.forks?.toLocaleString() || '-'}</span></div>
-        <div class="info-row"><span>🔤 语言</span><span>{project.language || 'N/A'}</span></div>
-      </div>
-      <div class="section">
-        <a href={`https://github.com/${project.fullName}`} target="_blank" class="gh-link">
-          在 GitHub 上查看 →
-        </a>
-      </div>
+      <a href={`https://github.com/${project.fullName}`} target="_blank" class="gh-btn">
+        在 GitHub 上查看 →
+      </a>
     </>
   ) : (
     <div class="empty-side">
-      <p>选择项目以查看详情</p>
+      <p>选择项目查看详情</p>
     </div>
   )}
 </div>
 
 <style>
-  .side-panel { display: flex; flex-direction: column; gap: 16px; }
-  .section {
-    background: var(--bg-sidebar);
-    border-radius: 8px;
+  .side-panel { display: flex; flex-direction: column; gap: 12px; }
+  .panel-section {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
     padding: 14px;
   }
-  .section-title {
+  .panel-title {
     font-size: 11px;
     font-weight: 700;
     letter-spacing: 1px;
-    color: var(--accent);
-    margin-bottom: 8px;
+    color: var(--accent-orange);
+    margin-bottom: 10px;
   }
-  .section-content {
-    font-size: 14px;
-    line-height: 1.6;
-    color: var(--text-primary);
-  }
-  .info-row {
+  .info-list { display: flex; flex-direction: column; }
+  .info-item {
     display: flex;
     justify-content: space-between;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border-light);
     font-size: 13px;
-    padding: 4px 0;
-    border-bottom: 1px solid var(--border);
   }
-  .info-row:last-child { border-bottom: none; }
-  .gh-link {
+  .info-item:last-child { border-bottom: none; }
+  .info-key { color: var(--text-secondary); }
+  .info-val { font-family: var(--font-mono); font-weight: 500; color: var(--text-primary); }
+  .info-val.green { color: var(--accent-green); }
+  .info-val.red { color: var(--accent-red); }
+  .gh-btn {
     display: block;
     text-align: center;
     padding: 10px;
-    background: var(--accent);
-    color: white;
+    background: rgba(88, 166, 255, 0.1);
+    color: var(--accent-blue);
+    border: 1px solid rgba(88, 166, 255, 0.3);
     border-radius: 8px;
     text-decoration: none;
     font-weight: 600;
-    font-size: 14px;
+    font-size: 13px;
+    transition: all 0.15s;
   }
-  .gh-link:hover { background: var(--accent-hover); }
+  .gh-btn:hover {
+    background: rgba(88, 166, 255, 0.2);
+    text-decoration: none;
+  }
   .empty-side {
     text-align: center;
     color: var(--text-secondary);

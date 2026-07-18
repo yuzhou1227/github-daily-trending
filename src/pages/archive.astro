@@ -24,7 +24,7 @@ const dates = Object.keys(allData).sort().reverse();
             <a href={`/github-daily-trending/archive/${date}`} class="date-card">
               <span class="date">{date}</span>
               <span class="count">{count} 个项目</span>
-              {top1 && <span class="top-item">🏆 {top1.fullName}</span>}
+              {top1 && <span class="top-item">{top1.fullName}</span>}
             </a>
           );
         })}
@@ -38,8 +38,13 @@ const dates = Object.keys(allData).sort().reverse();
 
 <style>
   .archive-page { padding-top: 24px; padding-bottom: 24px; }
-  .page-title { font-size: 20px; margin-bottom: 16px; }
-  .date-list { display: flex; flex-direction: column; gap: 8px; }
+  .page-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--text-primary);
+  }
+  .date-list { display: flex; flex-direction: column; gap: 6px; }
   .date-card {
     display: flex;
     align-items: center;
@@ -52,9 +57,25 @@ const dates = Object.keys(allData).sort().reverse();
     color: var(--text-primary);
     transition: border-color 0.15s;
   }
-  .date-card:hover { border-color: var(--accent); }
-  .date { font-weight: 700; font-size: 15px; min-width: 100px; }
+  .date-card:hover {
+    border-color: var(--accent-blue);
+    text-decoration: none;
+  }
+  .date {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    font-size: 14px;
+    min-width: 110px;
+  }
   .count { font-size: 13px; color: var(--text-secondary); }
-  .top-item { font-size: 13px; color: var(--accent); margin-left: auto; }
+  .top-item {
+    font-size: 13px;
+    color: var(--accent-blue);
+    margin-left: auto;
+    max-width: 400px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
   .no-data { color: var(--text-secondary); text-align: center; padding: 60px 0; }
 </style>

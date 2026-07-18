@@ -1,16 +1,25 @@
 <footer class="footer">
-  <div class="container">
-    <p>数据来源 <a href="https://github.com/trending" target="_blank">GitHub Trending</a> · 分析由 AI 生成 · 每日 UTC 0 点更新</p>
+  <div class="container footer-inner">
+    <p>GitHub Trending Daily Brief</p>
+    <p class="footer-hint">左侧看全榜 ↗ 右侧看当前项目细节</p>
   </div>
 </footer>
 
 <style>
   .footer {
-    border-top: 1px solid var(--border);
-    padding: 24px 0;
-    text-align: center;
-    font-size: 13px;
-    color: var(--text-secondary);
+    border-top: 1px solid var(--border-light);
+    padding: 20px 0;
+    margin-top: 20px;
   }
-  .footer a { color: var(--accent); }
+  .footer-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer p {
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+  }
+  .footer-hint { opacity: 0.6; }
 </style>

@@ -32,15 +32,15 @@ const hasData = daily.length > 0;
   <main class="container main-layout">
     {hasData ? (
       <>
-        <div class="panel left-panel">
+        <aside class="left-panel">
           <RankList {daily} {weekly} {monthly} activeRange="daily" selectedIndex={0} />
-        </div>
-        <div class="panel center-panel">
+        </aside>
+        <section class="center-panel">
           <ProjectDetail project={daily[0] || null} />
-        </div>
-        <div class="panel right-panel">
+        </section>
+        <aside class="right-panel">
           <SidePanel project={daily[0] || null} />
-        </div>
+        </aside>
       </>
     ) : (
       <div class="no-data">
@@ -55,17 +55,32 @@ const hasData = daily.length > 0;
 <style>
   .main-layout {
     display: grid;
-    grid-template-columns: 1fr 3fr 1.5fr;
+    grid-template-columns: 300px 1fr 240px;
     gap: 16px;
-    padding-top: 16px;
+    padding-top: 20px;
     padding-bottom: 16px;
     min-height: calc(100vh - 120px);
   }
-  .panel {
+  .left-panel {
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: 12px;
     padding: 16px;
+    height: fit-content;
+    position: sticky;
+    top: 20px;
+  }
+  .center-panel {
+    min-height: 400px;
+  }
+  .right-panel {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    height: fit-content;
+    position: sticky;
+    top: 20px;
   }
   .no-data {
     grid-column: 1 / -1;
@@ -76,11 +91,15 @@ const hasData = daily.length > 0;
   .back-link {
     display: inline-block;
     margin-top: 12px;
-    color: var(--accent);
+    color: var(--accent-blue);
     text-decoration: none;
+  }
+  @media (max-width: 1024px) {
+    .main-layout { grid-template-columns: 260px 1fr; }
+    .right-panel { display: none; }
   }
   @media (max-width: 768px) {
     .main-layout { grid-template-columns: 1fr; }
-    .right-panel { display: none; }
+    .right-panel, .left-panel { display: none; }
   }
 </style>

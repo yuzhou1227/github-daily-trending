@@ -6,50 +6,90 @@ export interface Props {
 }
 
 const { project } = Astro.props;
+const a = project?.analysis;
 ---
 
 {project ? (
   <div class="project-detail">
     <div class="detail-header">
+      <div class="detail-rank-badge">#{project.rank}</div>
       <h2 class="project-name">{project.fullName}</h2>
       <p class="project-desc">{project.description}</p>
       <div class="project-tags">
         {project.language && <span class="tag lang">{project.language}</span>}
-        <span class="tag stars">⭐ {project.stars.toLocaleString()} stars</span>
-        <span class="tag today">▲ {project.starsRange.toLocaleString()} today</span>
         {project.weeklyAppearances > 1 && (
           <span class="tag weekly">本周上日榜 {project.weeklyAppearances} 次</span>
         )}
+        <span class="tag stars">★ {project.stars.toLocaleString()} stars</span>
+        <span class="tag today">▲ +{project.starsRange.toLocaleString()} today</span>
       </div>
     </div>
 
-    {project.analysis ? (
-      <div class="analysis-grid">
-        <AnalysisCard title="CORE IDEA" content={project.analysis.coreIdea} />
-        <AnalysisCard title="ENGINEERING METHOD" content={project.analysis.engineeringMethod} />
-        <AnalysisCard title="WHY IT MATTERS" content={project.analysis.whyItMatters} highlight />
-        <div class="split-row">
-          <div class="split-item">
-            <h3 class="split-label">AUDIENCE</h3>
-            <p>{project.analysis.audience}</p>
+    {a ? (
+      <div class="analysis-section">
+        <div class="analysis-cards">
+          <AnalysisCard number={1} title="CORE IDEA" content={a.coreIdea} />
+          <AnalysisCard number={2} title="ENGINEERING METHOD" content={a.engineeringMethod} />
+          <AnalysisCard number={3} title="WHY IT MATTERS" content={a.whyItMatters} highlight />
+        </div>
+
+        <div class="info-grid">
+          <div class="info-section">
+            <h3 class="info-label">谁最该看</h3>
+            <div class="meta-row">
+              <span class="meta-key">AUDIENCE</span>
+              <span class="meta-val">{a.audience}</span>
+            </div>
+            <div class="meta-row">
+              <span class="meta-key">DIFFICULTY</span>
+              <span class="meta-val diff">{a.difficulty}</span>
+            </div>
           </div>
-          <div class="split-item">
-            <h3 class="split-label">DIFFICULTY</h3>
-            <p class="diff-level">{project.analysis.difficulty}</p>
+
+          <div class="info-section">
+            <h3 class="info-label">实用信息</h3>
+            <div class="meta-row">
+              <span class="meta-key">QUICK START</span>
+              <span class="meta-val">{a.quickStart}</span>
+            </div>
           </div>
         </div>
-        <AnalysisCard title="QUICK START" content={project.analysis.quickStart} />
+
+        {a.whyItIsHot && (
+          <div class="hot-section">
+            <h3 class="info-label">WHY IT IS HOT</h3>
+            <p>{a.whyItIsHot}</p>
+          </div>
+        )}
+
+        {a.useCase && (
+          <div class="hot-section">
+            <h3 class="info-label">USE CASE</h3>
+            <p>{a.useCase}</p>
+          </div>
+        )}
+
+        <div class="repo-info">
+          <span class="repo-stat">★ {project.stars.toLocaleString()}</span>
+          <span class="repo-stat sep">|</span>
+          <span class="repo-stat">▲ +{project.starsRange.toLocaleString()}</span>
+          <span class="repo-stat sep">|</span>
+          <span class="repo-stat">⑂ {project.forks?.toLocaleString() || '-'}</span>
+          <span class="repo-stat sep">|</span>
+          <span class="repo-stat">{project.language || 'N/A'}</span>
+          <a href={`https://github.com/${project.fullName}`} target="_blank" class="gh-link">
+            在 GitHub 上查看 →
+          </a>
+        </div>
       </div>
     ) : (
       <div class="loading-analysis">
-        <div class="loading-icon">⏳</div>
-        <p>AI 分析生成中</p>
-        <p class="loading-hint">项目详情将在下次自动更新时补充</p>
+        <p>分析生成中</p>
       </div>
     )}
   </div>
 ) : (
-  <div class="empty-state">选择一个项目查看详情</div>
+  <div class="empty-state">选择项目查看详情</div>
 )}
 
 <style>
@@ -61,33 +101,128 @@ const { project } = Astro.props;
     color: var(--text-secondary);
     font-size: 15px;
   }
-  .project-detail { display: flex; flex-direction: column; gap: 16px; }
+  .project-detail { display: flex; flex-direction: column; gap: 20px; }
   .detail-header { margin-bottom: 4px; }
-  .project-name { font-size: 22px; font-weight: 700; }
-  .project-desc { color: var(--text-secondary); font-size: 14px; margin-top: 4px; }
-  .project-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .detail-rank-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(240, 136, 62, 0.15);
+    color: var(--accent-orange);
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+  .project-name { font-size: 24px; font-weight: 700; }
+  .project-desc { color: var(--text-secondary); font-size: 14px; margin-top: 6px; line-height: 1.5; }
+  .project-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
   .tag {
-    font-size: 12px; padding: 3px 8px; border-radius: 6px;
-    background: var(--tag-bg); color: var(--tag-text);
+    font-size: 12px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-weight: 500;
   }
-  .tag.stars { background: #fef3c7; color: #92400e; }
-  .tag.today { background: #fce7f3; color: #9d174d; }
-  .tag.weekly { background: #2d1b69; color: #a78bfa; }
-  [data-theme="dark"] .tag.stars { background: #713f12; color: #fde68a; }
-  [data-theme="dark"] .tag.today { background: #831843; color: #fbcfe8; }
-  .analysis-grid { display: flex; flex-direction: column; gap: 10px; }
-  .split-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .split-item {
-    background: var(--bg-sidebar); border-radius: 8px; padding: 14px;
+  .tag.lang {
+    background: rgba(88, 166, 255, 0.12);
+    color: var(--accent-blue);
   }
-  .split-label {
-    font-size: 11px; font-weight: 700; letter-spacing: 1px;
-    color: var(--accent); margin-bottom: 4px;
+  .tag.stars {
+    background: rgba(63, 185, 80, 0.12);
+    color: var(--accent-green);
   }
-  .diff-level { color: var(--tag-text); font-weight: 600; }
+  .tag.today {
+    background: rgba(248, 81, 73, 0.12);
+    color: var(--accent-red);
+  }
+  .tag.weekly {
+    background: rgba(188, 140, 255, 0.12);
+    color: var(--accent-purple);
+  }
+
+  .analysis-section { display: flex; flex-direction: column; gap: 14px; }
+  .analysis-cards { display: flex; flex-direction: column; gap: 10px; }
+
+  .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .info-section {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+    padding: 14px;
+  }
+  .info-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--accent-orange);
+    margin-bottom: 10px;
+  }
+  .meta-row {
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border-light);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .meta-row:last-child { border-bottom: none; }
+  .meta-key {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: var(--text-secondary);
+  }
+  .meta-val {
+    font-size: 13px;
+    color: var(--text-primary);
+    line-height: 1.5;
+  }
+  .meta-val.diff { color: var(--accent-orange); font-weight: 600; }
+
+  .hot-section {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+    padding: 14px;
+  }
+  .hot-section p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-primary);
+  }
+
+  .repo-info {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 14px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+    font-size: 13px;
+    font-family: var(--font-mono);
+    flex-wrap: wrap;
+  }
+  .repo-stat.sep { color: var(--border); }
+  .repo-stat:first-child { color: var(--accent-green); }
+  .repo-stat:nth-child(3) { color: var(--accent-red); }
+  .gh-link {
+    margin-left: auto;
+    color: var(--accent-blue);
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .gh-link:hover { text-decoration: underline; }
   .loading-analysis {
-    padding: 40px; text-align: center; color: var(--text-secondary);
+    padding: 40px;
+    text-align: center;
+    color: var(--text-secondary);
   }
-  .loading-icon { font-size: 32px; margin-bottom: 8px; }
-  .loading-hint { font-size: 13px; margin-top: 4px; opacity: 0.7; }
+
+  @media (max-width: 768px) {
+    .info-grid { grid-template-columns: 1fr; }
+  }
 </style>

@@ -21,18 +21,18 @@ const rangeLabels = { daily: '日榜', weekly: '周榜', monthly: '月榜' };
 
 <div class="rank-list">
   <div class="tab-bar">
-    {ranges.map(r => (
-      <button
-        class="tab-btn"
-        class:list={{ active: activeRange === r.key }}
-        data-range={r.key}
-      >
-        {r.label}
-      </button>
-    ))}
-  </div>
-  <div class="list-title">
-    TOP 10 <span class="range-label">{rangeLabels[activeRange]}</span>
+    <span class="top-label">TOP 10 {rangeLabels[activeRange]}</span>
+    <div class="tab-group">
+      {ranges.map(r => (
+        <button
+          class="tab-btn"
+          class:list={{ active: activeRange === r.key }}
+          data-range={r.key}
+        >
+          {r.label}
+        </button>
+      ))}
+    </div>
   </div>
   <ul class="items" id="rank-items">
     {currentItems.slice(0, 10).map((item, i) => (
@@ -50,3 +50,40 @@ const rangeLabels = { daily: '日榜', weekly: '周榜', monthly: '月榜' };
     ))}
   </ul>
 </div>
+
+<style>
+  .rank-list { display: flex; flex-direction: column; }
+  .tab-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border-light);
+  }
+  .top-label {
+    font-size: 13px;
+    font-weight: 600;
+    font-family: var(--font-mono);
+    color: var(--text-secondary);
+    letter-spacing: 0.5px;
+  }
+  .tab-group { display: flex; gap: 2px; }
+  .tab-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 12px;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .tab-btn:hover { color: var(--text-primary); background: var(--bg-hover); }
+  .tab-btn.active {
+    color: var(--accent-blue);
+    background: rgba(88, 166, 255, 0.1);
+  }
+  .items { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+</style>

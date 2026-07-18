@@ -11,7 +11,7 @@ export interface Props {
   weeklyAppearances: number;
 }
 
-const { rank, name, starsRange, language, isActive, analysis, weeklyAppearances } = Astro.props;
+const { rank, name, stars, language, isActive, analysis, weeklyAppearances } = Astro.props;
 ---
 
 <li class="rank-item" class:list={{ active: isActive }}>
@@ -19,12 +19,12 @@ const { rank, name, starsRange, language, isActive, analysis, weeklyAppearances 
   <div class="rank-info">
     <span class="rank-name">{name}</span>
     <div class="rank-meta">
-      <span class="stars">⭐ {starsRange.toLocaleString()}</span>
+      <span class="stars">{stars.toLocaleString()} stars</span>
       {language && <span class="lang-tag">{language}</span>}
       {weeklyAppearances > 1 && <span class="week-tag">周{weeklyAppearances}次</span>}
     </div>
   </div>
-  {analysis === null && <span class="pending-badge">AI 生成中</span>}
+  {analysis === null && <span class="pending-badge">分析中</span>}
 </li>
 
 <style>
@@ -32,22 +32,24 @@ const { rank, name, starsRange, language, isActive, analysis, weeklyAppearances 
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 10px 12px;
+    padding: 9px 12px;
     border-radius: 8px;
     cursor: pointer;
-    transition: background 0.15s;
+    transition: all 0.15s;
     list-style: none;
+    border: 1px solid transparent;
   }
-  .rank-item:hover { background: var(--bg-sidebar); }
+  .rank-item:hover { background: var(--bg-hover); }
   .rank-item.active {
-    background: color-mix(in srgb, var(--accent) 15%, var(--bg-card));
-    border-left: 3px solid var(--accent);
+    background: rgba(88, 166, 255, 0.08);
+    border-color: rgba(88, 166, 255, 0.3);
   }
   .rank-num {
+    font-family: var(--font-mono);
     font-weight: 700;
-    font-size: 14px;
-    color: var(--accent);
-    min-width: 28px;
+    font-size: 15px;
+    color: var(--accent-orange);
+    min-width: 30px;
   }
   .rank-info { flex: 1; min-width: 0; }
   .rank-name {
@@ -57,6 +59,7 @@ const { rank, name, starsRange, language, isActive, analysis, weeklyAppearances 
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    color: var(--accent-blue);
   }
   .rank-meta {
     display: flex;
@@ -67,15 +70,15 @@ const { rank, name, starsRange, language, isActive, analysis, weeklyAppearances 
     margin-top: 2px;
   }
   .lang-tag {
-    background: var(--tag-bg);
-    color: var(--tag-text);
+    background: rgba(139, 148, 158, 0.1);
+    color: var(--text-secondary);
     padding: 1px 6px;
     border-radius: 4px;
     font-size: 11px;
   }
   .week-tag {
-    background: #2d1b69;
-    color: #a78bfa;
+    background: rgba(188, 140, 255, 0.1);
+    color: var(--accent-purple);
     padding: 1px 6px;
     border-radius: 4px;
     font-size: 11px;
@@ -83,7 +86,7 @@ const { rank, name, starsRange, language, isActive, analysis, weeklyAppearances 
   .pending-badge {
     font-size: 11px;
     color: var(--text-secondary);
-    background: var(--bg-sidebar);
+    background: var(--bg-hover);
     padding: 2px 6px;
     border-radius: 4px;
   }

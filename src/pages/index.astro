@@ -22,20 +22,20 @@ const defaultProject = daily[0] || null;
 
 <BaseLayout title="今日榜单" date={latestDate}>
   <Header />
-  <main class="container main-layout" id="app">
-    <div class="panel left-panel">
+  <main class="container main-layout">
+    <aside class="left-panel">
       <RankList {daily} {weekly} {monthly} activeRange="daily" selectedIndex={0} />
-    </div>
-    <div class="panel center-panel" id="detail-panel">
+    </aside>
+    <section class="center-panel" id="detail-panel">
       <ProjectDetail project={defaultProject} />
-    </div>
-    <div class="panel right-panel" id="side-panel">
+    </section>
+    <aside class="right-panel" id="side-panel">
       <SidePanel project={defaultProject} />
-    </div>
+    </aside>
   </main>
   {lastUpdated && (
     <div class="status-bar container">
-      <span class="update-info">上次更新：{new Date(lastUpdated).toLocaleString('zh-CN')}</span>
+      <span class="update-info">上次更新: {new Date(lastUpdated).toLocaleString('zh-CN')}</span>
       {Date.now() - new Date(lastUpdated).getTime() > 26 * 3600000 && (
         <span class="stale-warning">⚠️ 数据已超过 24 小时未更新</span>
       )}
@@ -48,7 +48,6 @@ const defaultProject = daily[0] || null;
   const data = allData[latestDate];
   if (!data) throw new Error('no data');
 
-  const $ = (sel) => document.querySelector(sel);
   const detailPanel = document.getElementById('detail-panel');
   const sidePanel = document.getElementById('side-panel');
   const itemsContainer = document.getElementById('rank-items');
@@ -61,15 +60,16 @@ const defaultProject = daily[0] || null;
 
   function render(project) {
     if (!project) {
-      detailPanel.innerHTML = '<div class="panel" style="display:flex;align-items:center;justify-content:center;color:var(--text-secondary)">选择项目查看详情</div>';
-      sidePanel.innerHTML = '<div class="panel" style="display:flex;align-items:center;justify-content:center;color:var(--text-secondary)">选择项目以查看详情</div>';
+      detailPanel.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;color:var(--text-secondary);height:100%">选择项目查看详情</div>';
+      sidePanel.innerHTML = '<div style="padding:40px 0;text-align:center;color:var(--text-secondary);font-size:14px">选择项目以查看详情</div>';
       return;
     }
-    import('/src/components/ProjectDetail.astro').then(m => {});
-    // Use fetch to get rendered HTML for selected project (alternative: client render)
+    const url = new URL(window.location);
+    url.searchParams.set('range', state.range);
+    url.searchParams.set('index', state.index);
+    window.location.href = url.toString();
   }
 
-  // Event delegation for rank items
   itemsContainer?.addEventListener('click', (e) => {
     const item = e.target.closest('.rank-item');
     if (!item) return;
@@ -78,15 +78,13 @@ const defaultProject = daily[0] || null;
     if (newIndex === -1 || newIndex === state.index) return;
     state.index = newIndex;
     const project = getItems()[newIndex];
-    // Navigate with query params
     const url = new URL(window.location);
     url.searchParams.set('range', state.range);
     url.searchParams.set('index', state.index);
     window.location.href = url.toString();
   });
 
-  // Tab switching
-  document.querySelector('.tab-bar')?.addEventListener('click', (e) => {
+  document.querySelector('.tab-group')?.addEventListener('click', (e) => {
     const btn = e.target.closest('.tab-btn');
     if (!btn) return;
     const range = btn.dataset.range;
@@ -103,29 +101,49 @@ const defaultProject = daily[0] || null;
 <style>
   .main-layout {
     display: grid;
-    grid-template-columns: 1fr 3fr 1.5fr;
+    grid-template-columns: 300px 1fr 240px;
     gap: 16px;
-    padding-top: 16px;
+    padding-top: 20px;
     padding-bottom: 16px;
     min-height: calc(100vh - 140px);
   }
-  .panel {
+  .left-panel {
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: 12px;
     padding: 16px;
+    height: fit-content;
+    position: sticky;
+    top: 20px;
+  }
+  .center-panel {
+    min-height: 400px;
+  }
+  .right-panel {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    height: fit-content;
+    position: sticky;
+    top: 20px;
   }
   .status-bar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 8px 0;
+    padding: 10px 0;
     font-size: 12px;
   }
   .update-info { color: var(--text-secondary); }
-  .stale-warning { color: #f59e0b; font-weight: 600; }
+  .stale-warning { color: var(--accent-gold); font-weight: 600; }
+  @media (max-width: 1024px) {
+    .main-layout { grid-template-columns: 260px 1fr; }
+    .right-panel { display: none; }
+  }
   @media (max-width: 768px) {
     .main-layout { grid-template-columns: 1fr; }
     .right-panel { display: none; }
+    .left-panel { position: static; }
   }
 </style>
