@@ -17,20 +17,27 @@ const daily = todayData?.ranges?.daily || [];
 const weekly = todayData?.ranges?.weekly || [];
 const monthly = todayData?.ranges?.monthly || [];
 const lastUpdated = todayData?.generatedAt || '';
-const defaultProject = daily[0] || null;
+
+const url = new URL(Astro.request.url);
+const rangeParam = url.searchParams.get('range') || 'daily';
+const indexParam = parseInt(url.searchParams.get('index')) || 0;
+const activeRange = ['daily', 'weekly', 'monthly'].includes(rangeParam) ? rangeParam : 'daily';
+const currentItems = activeRange === 'daily' ? daily : activeRange === 'weekly' ? weekly : monthly;
+const selectedIndex = indexParam >= 0 && indexParam < currentItems.length ? indexParam : 0;
+const activeProject = currentItems[selectedIndex] || null;
 ---
 
 <BaseLayout title="今日榜单" date={latestDate}>
   <Header />
   <main class="container main-layout">
     <aside class="left-panel">
-      <RankList {daily} {weekly} {monthly} activeRange="daily" selectedIndex={0} />
+      <RankList {daily} {weekly} {monthly} {activeRange} {selectedIndex} />
     </aside>
     <section class="center-panel" id="detail-panel">
-      <ProjectDetail project={defaultProject} />
+      <ProjectDetail project={activeProject} />
     </section>
     <aside class="right-panel" id="side-panel">
-      <SidePanel project={defaultProject} />
+      <SidePanel project={activeProject} />
     </aside>
   </main>
   {lastUpdated && (
@@ -52,7 +59,16 @@ const defaultProject = daily[0] || null;
   const sidePanel = document.getElementById('side-panel');
   const itemsContainer = document.getElementById('rank-items');
 
-  let state = { range: 'daily', index: 0 };
+  let state = (() => {
+    const p = new URLSearchParams(window.location.search);
+    const range = p.get('range') || 'daily';
+    const index = parseInt(p.get('index')) || 0;
+    const items = data.ranges[range] || [];
+    return {
+      range: ['daily', 'weekly', 'monthly'].includes(range) ? range : 'daily',
+      index: index >= 0 && index < items.length ? index : 0,
+    };
+  })();
 
   function getItems() {
     return data.ranges[state.range] || [];
@@ -64,10 +80,28 @@ const defaultProject = daily[0] || null;
       sidePanel.innerHTML = '<div style="padding:40px 0;text-align:center;color:var(--text-secondary);font-size:14px">选择项目以查看详情</div>';
       return;
     }
+    // Full page load to render server-side
     const url = new URL(window.location);
     url.searchParams.set('range', state.range);
     url.searchParams.set('index', state.index);
     window.location.href = url.toString();
+  }
+
+  function updateURL() {
+    const url = new URL(window.location);
+    url.searchParams.set('range', state.range);
+    url.searchParams.set('index', state.index);
+    window.history.replaceState({ range: state.range, index: state.index }, '', url.toString());
+  }
+
+  function updateActiveClass() {
+    itemsContainer?.querySelectorAll('.rank-item').forEach((el, i) => {
+      el.classList.toggle('active', i === state.index);
+    });
+    // Update tab buttons
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.range === state.range);
+    });
   }
 
   itemsContainer?.addEventListener('click', (e) => {
@@ -77,11 +111,8 @@ const defaultProject = daily[0] || null;
     const newIndex = allItems.indexOf(item);
     if (newIndex === -1 || newIndex === state.index) return;
     state.index = newIndex;
-    const project = getItems()[newIndex];
-    const url = new URL(window.location);
-    url.searchParams.set('range', state.range);
-    url.searchParams.set('index', state.index);
-    window.location.href = url.toString();
+    updateURL();
+    render(getItems()[newIndex]);
   });
 
   document.querySelector('.tab-group')?.addEventListener('click', (e) => {
@@ -91,11 +122,12 @@ const defaultProject = daily[0] || null;
     if (range === state.range) return;
     state.range = range;
     state.index = 0;
-    const url = new URL(window.location);
-    url.searchParams.set('range', state.range);
-    url.searchParams.set('index', '0');
-    window.location.href = url.toString();
+    updateURL();
+    render(getItems()[0]);
   });
+
+  // Highlight active items on load
+  updateActiveClass();
 </script>
 
 <style>
