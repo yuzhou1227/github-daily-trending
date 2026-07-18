@@ -5,6 +5,7 @@ export interface Props {
 }
 
 const { title, date } = Astro.props;
+import '../assets/style.css';
 ---
 
 <!DOCTYPE html>
@@ -16,7 +17,6 @@ const { title, date } = Astro.props;
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Fira+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/assets/style.css" />
 </head>
 <body>
   <div class="app fade-in">
