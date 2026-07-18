@@ -29,6 +29,16 @@
   --radius-lg: 16px;
   --font: -apple-system, 'Helvetica Neue', 'SF Pro Display', 'SF Pro Text', sans-serif;
   --font-mono: 'SF Mono', 'SFMono-Regular', 'Menlo', monospace;
+
+  /* backward compat aliases for archive components */
+  --accent-blue: var(--accent);
+  --accent-orange: var(--rank);
+  --accent-green: var(--green);
+  --accent-red: var(--red);
+  --accent-purple: var(--purple);
+  --accent-gold: var(--gold);
+  --bg-hover: var(--bg-secondary);
+  --bg-surface: var(--bg-secondary);
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
